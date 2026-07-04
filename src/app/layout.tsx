@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Finmate",
-  description: "Проект без стандартного шаблонного контента",
+  title: 'Finmate',
+  description: 'Проект без стандартного шаблонного контента',
 };
 
 export default function RootLayout({
