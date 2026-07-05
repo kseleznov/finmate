@@ -1,15 +1,9 @@
 import { useState } from 'react';
 
 export function useDonut() {
-  const data = [
-    { name: 'Shopping', value: 57, color: '#e91e8c', icon: '🛍️' },
-    { name: 'Utilities', value: 21, color: '#4b5563', icon: '⚡' },
-    { name: 'Groceries', value: 12, color: '#12b76a', icon: '🛒' },
-    { name: 'Transport', value: 5, color: '#3b82f6', icon: '🚗' },
-    { name: 'Food', value: 5, color: '#f59e0b', icon: '☕' },
-  ];
+  const data: { name: string; value: number; color: string; icon: string }[] = [];
 
-  const totalAmount = 28200;
+  const totalAmount = 0;
 
   const RADIAN = Math.PI / 180;
 
