@@ -1,0 +1,125 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.amountRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 2px solid #6d28d9;
+  padding-bottom: 8px;
+}
+
+.amountInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #111827;
+  width: 100%;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+
+.amountInput::-webkit-outer-spin-button,
+.amountInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stepperButton {
+  border: none;
+  background: none;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+
+.textInput {
+  border: none;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.04);
+  padding: 14px 16px;
+  font-size: 1rem;
+  color: #111827;
+  outline: none;
+}
+
+.textInput::placeholder {
+  color: #94a3b8;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.categoryButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 6px;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+}
+
+.categoryIcon {
+  font-size: 1.3rem;
+}
+
+.categoryLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #475569;
+  text-align: center;
+}
+
+.categoryButtonActive {
+  border-color: #6d28d9;
+  background: rgba(109, 40, 217, 0.08);
+}
+
+.categoryButtonActive .categoryLabel {
+  color: #6d28d9;
+}
+
+.submitButton {
+  border: none;
+  border-radius: 999px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #8b7cf0;
+  cursor: pointer;
+  box-shadow: 0 16px 32px rgba(109, 40, 217, 0.28);
+}
