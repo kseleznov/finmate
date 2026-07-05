@@ -1,0 +1,62 @@
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 32px 20px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.iconCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  background: rgba(109, 40, 217, 0.12);
+  color: #6d28d9;
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.cardSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.cardScan {
+  background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+  border: none;
+  box-shadow: 0 16px 32px rgba(109, 40, 217, 0.28);
+}
+
+.cardScan .iconCircle {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.cardScan .cardTitle {
+  color: #fff;
+}
+
+.cardScan .cardSubtitle {
+  color: rgba(255, 255, 255, 0.8);
+}
