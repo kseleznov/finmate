@@ -6,7 +6,7 @@ import { OverviewIcon } from '../ui/OverviewIcon';
 export function useBottomNavigation() {
   const items = [
     { id: 'overview', label: 'Обзор', href: '/', Icon: OverviewIcon },
-    { id: 'operations', label: 'Операции', href: '/operations', Icon: OperationsIcon },
+    { id: 'operations', label: 'Operations', href: '/operations', Icon: OperationsIcon },
     { id: 'budget', label: 'Бюджет', href: '/budget', Icon: BudgetIcon },
   ] as const;
 
