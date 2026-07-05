@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useCategoriesList } from '../model/useCategoriesList';
-import CategoryCard from '@/entities/сategory-сard/CategoryCard';
+import { CategoryCard } from '@/entities/сategory-сard';
 import styles from './CategoriesList.module.css';
 
 export function CategoriesList() {
