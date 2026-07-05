@@ -5,6 +5,16 @@ import styles from './OperationsList.module.css';
 export function OperationsList() {
   const { formatAmount, groups } = useOperationsList();
 
+  if (groups.length === 0) {
+    return (
+      <div className={styles.empty}>
+        <div className={styles.emptyIcon}>🧾</div>
+        <div className={styles.emptyTitle}>No transactions yet</div>
+        <div className={styles.emptySubtitle}>Your expenses will show up here once you add one</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.list}>
       {groups.map((group) => (

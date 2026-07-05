@@ -18,6 +18,9 @@ export function Donut() {
     centerSub,
   } = useDonut();
 
+  const isEmpty = data.length === 0;
+  const pieData = isEmpty ? [{ name: '', value: 1, color: '#12b76a', icon: '' }] : data;
+
   return (
     <div className={styles.container}>
       <div className={styles.donutWrapper}>
@@ -26,33 +29,37 @@ export function Donut() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
-                  data={data}
+                  data={pieData}
                   cx="50%"
                   cy="50%"
                   innerRadius={70}
                   outerRadius={110}
-                  paddingAngle={2}
+                  paddingAngle={isEmpty ? 0 : 2}
                   dataKey="value"
-                  label={(props) =>
-                    renderCalloutLabel({
-                      props,
-                      data,
-                      RADIAN,
-                      hexToRgba,
-                      selected,
-                      handleClick,
-                      styles,
-                    })
+                  label={
+                    isEmpty
+                      ? undefined
+                      : (props) =>
+                          renderCalloutLabel({
+                            props,
+                            data,
+                            RADIAN,
+                            hexToRgba,
+                            selected,
+                            handleClick,
+                            styles,
+                          })
                   }
                   labelLine={false}
-                  cornerRadius={8}
+                  cornerRadius={isEmpty ? 0 : 8}
                   isAnimationActive={false}
-                  onClick={handleClick}
+                  onClick={isEmpty ? undefined : handleClick}
                 >
-                  {data.map((entry, index) => (
+                  {pieData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={entry.color}
+                      stroke={isEmpty ? 'none' : undefined}
                       opacity={selected === null || selected === index ? 1 : 0.25}
                     />
                   ))}
@@ -74,7 +81,11 @@ export function Donut() {
       </div>
 
       <div className={styles.hintText}>
-        {selected === null ? 'Click on a segment to see details' : 'Click again to return to total'}
+        {isEmpty
+          ? 'No expenses yet'
+          : selected === null
+            ? 'Click on a segment to see details'
+            : 'Click again to return to total'}
       </div>
     </div>
   );
