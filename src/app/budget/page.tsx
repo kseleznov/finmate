@@ -1,12 +1,14 @@
-import styles from '../page.module.css';
-import { Header } from '@/widgets/header';
+import styles from './page.module.css';
+import { Budget } from '@/widgets/budget';
 import { BottomNavigation } from '@/widgets/bottom-navigation';
 
 export default function BudgetPage() {
   return (
     <main className={styles.container}>
-      <Header />
-      <p>Бюджет скоро появится здесь.</p>
+      <h1 className={styles.title}>Monthly budget</h1>
+
+      <Budget />
+
       <BottomNavigation />
     </main>
   );
