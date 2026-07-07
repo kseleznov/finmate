@@ -1,3 +1,4 @@
+import { useTranslation } from '@/entities/locale';
 import { PencilIcon } from './PencilIcon';
 import styles from './BudgetSummary.module.css';
 
@@ -20,11 +21,13 @@ export function BudgetSummary({
   allocated,
   leftToAllocate,
 }: Props) {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.card}>
       <div className={styles.topRow}>
         <div>
-          <div className={styles.label}>Expected income</div>
+          <div className={styles.label}>{t('budget.expectedIncome')}</div>
           {isEditingIncome ? (
             <input
               type="number"
@@ -44,7 +47,7 @@ export function BudgetSummary({
           type="button"
           className={styles.editButton}
           onClick={() => setIsEditingIncome(true)}
-          aria-label="Edit expected income"
+          aria-label={t('budget.editIncome')}
         >
           <PencilIcon />
         </button>
@@ -54,11 +57,11 @@ export function BudgetSummary({
 
       <div className={styles.statsRow}>
         <div>
-          <div className={styles.statLabel}>Allocated</div>
+          <div className={styles.statLabel}>{t('budget.allocated')}</div>
           <div className={styles.statValue}>{formatAmount(allocated)}</div>
         </div>
         <div className={styles.statRight}>
-          <div className={styles.statLabel}>Left to allocate</div>
+          <div className={styles.statLabel}>{t('budget.leftToAllocate')}</div>
           <div className={styles.statValue}>{formatAmount(leftToAllocate)}</div>
         </div>
       </div>

@@ -26,7 +26,7 @@ export function setStoredCurrency(currency: CurrencyCode) {
   localStorage.setItem(CURRENCY_KEY, currency);
 }
 
-export function formatAmount(amount: number, currency: CurrencyCode) {
+export function formatAmount(amount: number, currency: CurrencyCode, intlLocale = 'ru-RU') {
   const sign = amount < 0 ? '-' : '';
-  return `${sign}${new Intl.NumberFormat('ru-RU').format(Math.abs(amount))} ${getCurrencySymbol(currency)}`;
+  return `${sign}${new Intl.NumberFormat(intlLocale).format(Math.abs(amount))} ${getCurrencySymbol(currency)}`;
 }

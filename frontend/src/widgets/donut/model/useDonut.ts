@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
+import { useTranslation } from '@/entities/locale';
 
 interface CategoryBreakdownDto {
   categoryName: string;
@@ -24,6 +25,7 @@ function getCurrentMonth() {
 
 export function useDonut() {
   const { currency } = useCurrency();
+  const { t, intlLocale } = useTranslation();
   const [data, setData] = useState<{ name: string; value: number; color: string; icon: string }[]>(
     []
   );
@@ -31,7 +33,7 @@ export function useDonut() {
 
   const RADIAN = Math.PI / 180;
 
-  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency);
+  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency, intlLocale);
 
   const hexToRgba = (hex: string, alpha: number) => {
     const value = parseInt(hex.replace('#', ''), 16);
@@ -80,10 +82,11 @@ export function useDonut() {
     }
   };
 
-  const centerLabel = selected === null ? 'Spent' : data[selected].name;
+  const centerLabel = selected === null ? t('donut.spent') : data[selected].name;
   const centerAmount =
     selected === null ? totalAmount : Math.round((totalAmount * data[selected].value) / 100);
-  const centerSub = selected === null ? '' : `${data[selected].value}% of expenses`;
+  const centerSub =
+    selected === null ? '' : t('donut.percentOfExpenses', { value: data[selected].value });
 
   return {
     data,

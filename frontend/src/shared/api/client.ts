@@ -1,4 +1,5 @@
 import { getToken } from './session';
+import { getStoredLocale, translate } from '@/shared/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -27,7 +28,10 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { message?: string } | null;
     const message = Array.isArray(body?.message) ? body.message[0] : body?.message;
-    throw new ApiError(response.status, message ?? 'Что-то пошло не так');
+    throw new ApiError(
+      response.status,
+      message ?? translate(getStoredLocale(), 'common.genericError')
+    );
   }
 
   if (response.status === 204) {

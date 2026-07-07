@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslation } from '@/entities/locale';
 import { useAddOperation } from '../model/useAddOperation';
 import { MethodStep } from './MethodStep';
 import { FormStep } from './FormStep';
@@ -10,6 +11,7 @@ import styles from './AddOperation.module.css';
 
 export function AddOperation() {
   const vm = useAddOperation();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -19,16 +21,16 @@ export function AddOperation() {
             type="button"
             className={styles.backLink}
             onClick={vm.goToChoose}
-            aria-label="Back"
+            aria-label={t('addOperation.back')}
           >
             <ChevronLeftIcon />
           </button>
         ) : (
-          <Link href="/overview" className={styles.closeLink} aria-label="Close">
+          <Link href="/overview" className={styles.closeLink} aria-label={t('addOperation.close')}>
             <CloseIcon />
           </Link>
         )}
-        <h1 className={styles.title}>Add operation</h1>
+        <h1 className={styles.title}>{t('addOperation.title')}</h1>
       </div>
 
       {vm.step === 'choose' ? (

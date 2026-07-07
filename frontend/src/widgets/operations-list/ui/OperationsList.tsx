@@ -2,10 +2,12 @@
 
 import { useOperationsList } from '../model/useOperationsList';
 import { OperationCard } from '@/entities/operation-card';
+import { useTranslation } from '@/entities/locale';
 import styles from './OperationsList.module.css';
 
 export function OperationsList() {
   const { formatAmount, groups, isLoading } = useOperationsList();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return null;
@@ -15,8 +17,8 @@ export function OperationsList() {
     return (
       <div className={styles.empty}>
         <div className={styles.emptyIcon}>🧾</div>
-        <div className={styles.emptyTitle}>No transactions yet</div>
-        <div className={styles.emptySubtitle}>Your expenses will show up here once you add one</div>
+        <div className={styles.emptyTitle}>{t('operations.emptyTitle')}</div>
+        <div className={styles.emptySubtitle}>{t('operations.emptySubtitle')}</div>
       </div>
     );
   }

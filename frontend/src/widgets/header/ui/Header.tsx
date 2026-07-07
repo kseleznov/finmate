@@ -1,11 +1,13 @@
 'use client';
 
 import { Logo } from '@/shared/ui/Logo';
+import { useTranslation } from '@/entities/locale';
 import { useHeader } from '../model/useHeader';
 import styles from './Header.module.css';
 
 export function Header() {
   const { spent, total, daysRemaining, formatAmount, percent, left } = useHeader();
+  const { t } = useTranslation();
 
   return (
     <header className={styles.card}>
@@ -22,9 +24,13 @@ export function Header() {
         </div>
 
         <div className={styles.bottomRow}>
-          <span className={styles.left}>{formatAmount(left)} left</span>
+          <span className={styles.left}>
+            {formatAmount(left)} {t('header.left')}
+          </span>
           <span className={styles.separator}>·</span>
-          <span className={styles.daysRemaining}>{daysRemaining} days remaining</span>
+          <span className={styles.daysRemaining}>
+            {t('header.daysRemaining', { days: daysRemaining })}
+          </span>
         </div>
       </div>
     </header>

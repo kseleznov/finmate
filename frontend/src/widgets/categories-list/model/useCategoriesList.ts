@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
+import { useLocale } from '@/entities/locale';
 
 interface CategoryBreakdownDto {
   categoryName: string;
@@ -33,7 +34,8 @@ function getCurrentMonth() {
 
 export function useCategoriesList() {
   const { currency } = useCurrency();
-  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency);
+  const { intlLocale } = useLocale();
+  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency, intlLocale);
 
   const [categories, setCategories] = useState<DisplayCategory[]>([]);
   const VISIBLE_COUNT = 3;

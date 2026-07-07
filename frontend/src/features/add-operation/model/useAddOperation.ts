@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { FormEvent } from 'react';
 import { apiFetch, ApiError } from '@/shared/api/client';
+import { useTranslation } from '@/entities/locale';
 
 type Step = 'choose' | 'manual';
 
@@ -31,6 +32,7 @@ function getCurrentMonth() {
 
 export function useAddOperation() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [categories, setCategories] = useState<DisplayCategory[]>([]);
   const [step, setStep] = useState<Step>('choose');
@@ -87,12 +89,12 @@ export function useAddOperation() {
     setError(null);
 
     if (!title.trim()) {
-      setError('Enter what you bought');
+      setError(t('addOperation.errorEnterTitle'));
       return;
     }
 
     if (amount <= 0) {
-      setError('Enter an amount greater than 0');
+      setError(t('addOperation.errorEnterAmount'));
       return;
     }
 
@@ -111,7 +113,7 @@ export function useAddOperation() {
       });
       router.push('/operations');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Could not save the operation');
+      setError(err instanceof ApiError ? err.message : t('addOperation.errorSubmit'));
       setIsSubmitting(false);
     }
   }

@@ -2,15 +2,17 @@
 
 import { useCategoriesList } from '../model/useCategoriesList';
 import { CategoryCard } from '@/entities/сategory-сard';
+import { useTranslation } from '@/entities/locale';
 import styles from './CategoriesList.module.css';
 
 export function CategoriesList() {
   const { formatAmount, categories, VISIBLE_COUNT, expanded, setExpanded, visibleCategories } =
     useCategoriesList();
+  const { t } = useTranslation();
 
   return (
     <section className={styles.categories}>
-      <h2 className={styles.sectionTitle}>Categories</h2>
+      <h2 className={styles.sectionTitle}>{t('categories.title')}</h2>
 
       <div className={styles.list}>
         {visibleCategories.map((category) => {
@@ -24,7 +26,7 @@ export function CategoriesList() {
               icon={category.icon}
               color={category.color}
               amount={formatAmount(category.spent)}
-              subtitle={`Remaining ${formatAmount(category.remaining)}`}
+              subtitle={t('categories.remaining', { amount: formatAmount(category.remaining) })}
               percent={percent}
             />
           );
@@ -37,7 +39,7 @@ export function CategoriesList() {
           className={styles.toggleButton}
           onClick={() => setExpanded((prev) => !prev)}
         >
-          {expanded ? 'Collapse' : 'Show all'}
+          {expanded ? t('categories.collapse') : t('categories.showAll')}
         </button>
       )}
     </section>

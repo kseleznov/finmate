@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { AuthProvider } from '@/entities/user';
+import { HtmlLangSync } from '@/entities/locale';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
+        <HtmlLangSync />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

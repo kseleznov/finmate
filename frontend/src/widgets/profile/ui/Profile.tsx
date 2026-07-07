@@ -2,12 +2,14 @@
 
 import { SignInForm, SignUpForm } from '@/features/auth';
 import { CURRENCIES, useCurrency } from '@/entities/currency';
+import { LOCALES, useTranslation } from '@/entities/locale';
 import { useProfile } from '../model/useProfile';
 import styles from './Profile.module.css';
 
 export function Profile() {
   const { user, isAuthenticated, logout, mode, setMode } = useProfile();
   const { currency, setCurrency } = useCurrency();
+  const { t, locale, setLocale } = useTranslation();
 
   if (!isAuthenticated || !user) {
     return (
@@ -18,14 +20,14 @@ export function Profile() {
             className={`${styles.tab} ${mode === 'signIn' ? styles.tabActive : ''}`}
             onClick={() => setMode('signIn')}
           >
-            Sign in
+            {t('auth.signIn')}
           </button>
           <button
             type="button"
             className={`${styles.tab} ${mode === 'signUp' ? styles.tabActive : ''}`}
             onClick={() => setMode('signUp')}
           >
-            Sign up
+            {t('auth.signUp')}
           </button>
         </div>
 
@@ -41,7 +43,7 @@ export function Profile() {
 
       <div className={styles.settingsList}>
         <div className={styles.settingsRow}>
-          <span>Валюта</span>
+          <span>{t('profile.currency')}</span>
           <div className={styles.currencyGroup}>
             {CURRENCIES.map((item) => (
               <button
@@ -57,10 +59,28 @@ export function Profile() {
             ))}
           </div>
         </div>
+
+        <div className={styles.settingsRow}>
+          <span>{t('profile.language')}</span>
+          <div className={styles.currencyGroup}>
+            {LOCALES.map((item) => (
+              <button
+                key={item.code}
+                type="button"
+                className={`${styles.currencyButton} ${
+                  locale === item.code ? styles.currencyButtonActive : ''
+                }`}
+                onClick={() => setLocale(item.code)}
+              >
+                {item.code.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <button type="button" className={styles.logoutButton} onClick={logout}>
-        Выйти
+        {t('profile.logout')}
       </button>
     </div>
   );
