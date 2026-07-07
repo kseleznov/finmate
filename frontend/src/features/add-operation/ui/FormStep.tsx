@@ -14,6 +14,8 @@ export function FormStep({
   categoryId,
   setCategoryId,
   handleSubmit,
+  error,
+  isSubmitting,
 }: Props) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -83,8 +85,10 @@ export function FormStep({
         </div>
       </div>
 
-      <button type="submit" className={styles.submitButton}>
-        Add operation
+      {error && <span className={styles.error}>{error}</span>}
+
+      <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+        {isSubmitting ? 'Saving…' : 'Add operation'}
       </button>
     </form>
   );

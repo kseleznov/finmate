@@ -1,27 +1,60 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { FormEvent } from 'react';
+import { apiFetch, ApiError } from '@/shared/api/client';
 
 type Step = 'choose' | 'manual';
+
+interface CategoryDto {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+}
+
+interface DisplayCategory {
+  id: string;
+  label: string;
+  icon: string;
+  color: string;
+}
 
 export function useAddOperation() {
   const router = useRouter();
 
-  const categories = [
-    { id: 'food', label: 'Food/Cafe', icon: '☕️', color: '#f59e0b' },
-    { id: 'groceries', label: 'Groceries', icon: '🛒', color: '#12b76a' },
-    { id: 'entertainment', label: 'Entertainment', icon: '🎬', color: '#8b5cf6' },
-    { id: 'transport', label: 'Transport', icon: '🚗', color: '#3b82f6' },
-    { id: 'shopping', label: 'Shopping', icon: '🛍️', color: '#e91e8c' },
-    { id: 'health', label: 'Health', icon: '❤️', color: '#ef4444' },
-    { id: 'utilities', label: 'Utilities', icon: '📄', color: '#4b5563' },
-    { id: 'other', label: 'Other', icon: '⋯', color: '#94a3b8' },
-  ] as const;
-
+  const [categories, setCategories] = useState<DisplayCategory[]>([]);
   const [step, setStep] = useState<Step>('choose');
   const [amount, setAmount] = useState(0);
   const [title, setTitle] = useState('');
   const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      const data = await apiFetch<CategoryDto[]>('/categories?type=EXPENSE');
+      if (cancelled) return;
+
+      setCategories(
+        data.map((category) => ({
+          id: category.id,
+          label: category.name,
+          icon: category.icon,
+          color: category.color,
+        }))
+      );
+    }
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function goToManual() {
     setStep('manual');
@@ -39,10 +72,38 @@ export function useAddOperation() {
     setAmount((prev) => Math.max(0, prev - 10));
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    setError(null);
 
-    router.push('/operations');
+    if (!title.trim()) {
+      setError('Enter what you bought');
+      return;
+    }
+
+    if (amount <= 0) {
+      setError('Enter an amount greater than 0');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await apiFetch('/operations', {
+        method: 'POST',
+        body: JSON.stringify({
+          title,
+          amount,
+          type: 'EXPENSE',
+          date: new Date().toISOString(),
+          categoryId: categoryId ?? undefined,
+        }),
+      });
+      router.push('/operations');
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Could not save the operation');
+      setIsSubmitting(false);
+    }
   }
 
   return {
@@ -59,5 +120,7 @@ export function useAddOperation() {
     categoryId,
     setCategoryId,
     handleSubmit,
+    error,
+    isSubmitting,
   };
 }
