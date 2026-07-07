@@ -13,11 +13,14 @@ interface AuthResponse {
 }
 
 const MIN_PASSWORD_LENGTH = 8;
+const MIN_USERNAME_LENGTH = 3;
+const USERNAME_PATTERN = /^[a-zA-Z0-9_.-]+$/;
 
 export function useSignUpForm() {
   const { login } = useAuth();
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,6 +28,16 @@ export function useSignUpForm() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+
+    if (username.length < MIN_USERNAME_LENGTH) {
+      setError(t('auth.usernameTooShort', { min: MIN_USERNAME_LENGTH }));
+      return;
+    }
+
+    if (!USERNAME_PATTERN.test(username)) {
+      setError(t('auth.usernameInvalid'));
+      return;
+    }
 
     if (password.length < MIN_PASSWORD_LENGTH) {
       setError(t('auth.passwordTooShort', { min: MIN_PASSWORD_LENGTH }));
@@ -36,7 +49,7 @@ export function useSignUpForm() {
     try {
       const data = await apiFetch<AuthResponse>('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, username, password }),
       });
       login(data.accessToken, data.user);
     } catch (err) {
@@ -46,5 +59,15 @@ export function useSignUpForm() {
     }
   };
 
-  return { email, setEmail, password, setPassword, error, isSubmitting, handleSubmit };
+  return {
+    email,
+    setEmail,
+    username,
+    setUsername,
+    password,
+    setPassword,
+    error,
+    isSubmitting,
+    handleSubmit,
+  };
 }

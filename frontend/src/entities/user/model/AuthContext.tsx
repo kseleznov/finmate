@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useSyncExternalStore } from 'react';
 import type { ReactNode } from 'react';
-import { getRawUser, saveSession, clearSession } from '@/shared/api/session';
+import { getRawUser, getToken, saveSession, clearSession } from '@/shared/api/session';
 import type { StoredUser } from '@/shared/api/session';
 
 type Listener = () => void;
@@ -45,6 +45,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   login: (token: string, user: StoredUser) => void;
   logout: () => void;
+  updateUser: (user: StoredUser) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -62,8 +63,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     notify();
   };
 
+  const updateUser = (nextUser: StoredUser) => {
+    const token = getToken();
+    if (!token) return;
+
+    saveSession(token, nextUser);
+    notify();
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,10 +4,25 @@ import { SignInForm, SignUpForm } from '@/features/auth';
 import { CURRENCIES, useCurrency } from '@/entities/currency';
 import { LOCALES, useTranslation } from '@/entities/locale';
 import { useProfile } from '../model/useProfile';
+import { PencilIcon } from './PencilIcon';
 import styles from './Profile.module.css';
 
 export function Profile() {
-  const { user, isAuthenticated, logout, mode, setMode } = useProfile();
+  const {
+    user,
+    isAuthenticated,
+    logout,
+    mode,
+    setMode,
+    isEditingUsername,
+    usernameDraft,
+    setUsernameDraft,
+    usernameError,
+    isSavingUsername,
+    startEditingUsername,
+    cancelEditingUsername,
+    saveUsername,
+  } = useProfile();
   const { currency, setCurrency } = useCurrency();
   const { t, locale, setLocale } = useTranslation();
 
@@ -36,10 +51,55 @@ export function Profile() {
     );
   }
 
+  const displayName = user.username ?? user.email;
+
   return (
     <div className={styles.profileCard}>
-      <div className={styles.avatar}>{user.email[0]?.toUpperCase()}</div>
-      <div className={styles.email}>{user.email}</div>
+      <div className={styles.avatar}>{displayName[0]?.toUpperCase()}</div>
+
+      {isEditingUsername ? (
+        <div className={styles.usernameEdit}>
+          <input
+            type="text"
+            className={styles.usernameInput}
+            value={usernameDraft}
+            onChange={(event) => setUsernameDraft(event.target.value)}
+            onKeyDown={(event) => event.key === 'Enter' && saveUsername()}
+            autoFocus
+          />
+          {usernameError && <span className={styles.error}>{usernameError}</span>}
+          <div className={styles.usernameEditActions}>
+            <button
+              type="button"
+              className={styles.usernameCancelButton}
+              onClick={cancelEditingUsername}
+              disabled={isSavingUsername}
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              type="button"
+              className={styles.usernameSaveButton}
+              onClick={saveUsername}
+              disabled={isSavingUsername}
+            >
+              {t('common.save')}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.usernameRow}>
+          <div className={styles.email}>{displayName}</div>
+          <button
+            type="button"
+            className={styles.editButton}
+            onClick={startEditingUsername}
+            aria-label={t('profile.editUsername')}
+          >
+            <PencilIcon />
+          </button>
+        </div>
+      )}
 
       <div className={styles.settingsList}>
         <div className={styles.settingsRow}>
