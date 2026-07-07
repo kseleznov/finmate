@@ -6,18 +6,19 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll(type?: 'INCOME' | 'EXPENSE') {
+  findAll(userId: string, type?: 'INCOME' | 'EXPENSE') {
     return this.prisma.category.findMany({
-      where: type ? { type } : undefined,
+      where: { userId, ...(type ? { type } : {}) },
       orderBy: { createdAt: 'asc' },
     });
   }
 
-  create(createCategoryDto: CreateCategoryDto) {
+  create(userId: string, createCategoryDto: CreateCategoryDto) {
     return this.prisma.category.create({
       data: {
         ...createCategoryDto,
         type: createCategoryDto.type ?? 'EXPENSE',
+        userId,
       },
     });
   }
