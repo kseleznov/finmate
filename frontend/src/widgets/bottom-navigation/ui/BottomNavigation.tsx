@@ -5,7 +5,7 @@ import { useBottomNavigation } from '../model/useBottomNavigation';
 import styles from './BottomNavigation.module.css';
 
 export function BottomNavigation() {
-  const { active, firstItem, secondItem, thirdItem } = useBottomNavigation();
+  const { active, firstItem, secondItem, thirdItem, fourthItem } = useBottomNavigation();
 
   return (
     <nav className={styles.bottomNav}>
@@ -24,13 +24,16 @@ export function BottomNavigation() {
         +
       </Link>
 
-      <Link
-        href={thirdItem.href}
-        className={`${styles.navItem} ${active === thirdItem.id ? styles.navItemActive : ''}`}
-      >
-        <thirdItem.Icon />
-        <span>{thirdItem.label}</span>
-      </Link>
+      {[thirdItem, fourthItem].map(({ id, label, href, Icon }) => (
+        <Link
+          key={id}
+          href={href}
+          className={`${styles.navItem} ${active === id ? styles.navItemActive : ''}`}
+        >
+          <Icon />
+          <span>{label}</span>
+        </Link>
+      ))}
     </nav>
   );
 }
