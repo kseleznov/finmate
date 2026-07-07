@@ -63,15 +63,17 @@ export function useBudget() {
 
       const limitByCategoryId = new Map(limitsRes.map((limit) => [limit.categoryId, limit.amount]));
 
-      setCategories(
-        categoriesRes.map((category) => ({
-          id: category.id,
-          title: category.name,
-          icon: category.icon,
-          color: category.color,
-          limit: limitByCategoryId.get(category.id) ?? 0,
-        }))
-      );
+      const mapped = categoriesRes.map((category) => ({
+        id: category.id,
+        title: category.name,
+        icon: category.icon,
+        color: category.color,
+        limit: limitByCategoryId.get(category.id) ?? 0,
+      }));
+
+      mapped.sort((a, b) => Number(b.limit > 0) - Number(a.limit > 0));
+
+      setCategories(mapped);
       setIncome(incomeRes.amount);
       setIsLoading(false);
     }
