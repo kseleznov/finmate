@@ -14,24 +14,28 @@ export function CategoriesList() {
     <section className={styles.categories}>
       <h2 className={styles.sectionTitle}>{t('categories.title')}</h2>
 
-      <div className={styles.list}>
-        {visibleCategories.map((category) => {
-          const budget = category.spent + category.remaining;
-          const percent = Math.round((category.spent / budget) * 100);
+      {categories.length === 0 ? (
+        <div className={styles.emptyHint}>{t('categories.emptyHint')}</div>
+      ) : (
+        <div className={styles.list}>
+          {visibleCategories.map((category) => {
+            const budget = category.spent + category.remaining;
+            const percent = Math.round((category.spent / budget) * 100);
 
-          return (
-            <CategoryCard
-              key={category.title}
-              title={category.title}
-              icon={category.icon}
-              color={category.color}
-              amount={formatAmount(category.spent)}
-              subtitle={t('categories.remaining', { amount: formatAmount(category.remaining) })}
-              percent={percent}
-            />
-          );
-        })}
-      </div>
+            return (
+              <CategoryCard
+                key={category.title}
+                title={category.title}
+                icon={category.icon}
+                color={category.color}
+                amount={formatAmount(category.spent)}
+                subtitle={t('categories.remaining', { amount: formatAmount(category.remaining) })}
+                percent={percent}
+              />
+            );
+          })}
+        </div>
+      )}
 
       {categories.length > VISIBLE_COUNT && (
         <button

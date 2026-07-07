@@ -32,3 +32,13 @@
 .toggleButton:hover {
   background: #f8fafc;
 }
+
+.emptyHint {
+  padding: 20px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  color: #64748b;
+  font-size: 0.9rem;
+  text-align: center;
+}

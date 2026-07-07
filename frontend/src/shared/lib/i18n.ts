@@ -93,6 +93,7 @@ const ru = {
     remaining: 'Осталось {amount}',
     collapse: 'Свернуть',
     showAll: 'Показать все',
+    emptyHint: 'Распределите лимиты для категорий, чтобы отобразить их здесь',
   },
   donut: {
     noExpenses: 'Пока нет расходов',
@@ -104,6 +105,8 @@ const ru = {
   header: {
     left: 'осталось',
     daysRemaining: 'дней осталось: {days}',
+    setIncomeHint:
+      'Установите доход, чтобы знать сколько денег потрачено и сколько дней до следующей зарплаты',
   },
   operations: {
     emptyTitle: 'Пока нет операций',
@@ -186,6 +189,7 @@ const en: Dictionary = {
     remaining: 'Remaining {amount}',
     collapse: 'Collapse',
     showAll: 'Show all',
+    emptyHint: 'Set category limits in your budget to see them here',
   },
   donut: {
     noExpenses: 'No expenses yet',
@@ -197,6 +201,7 @@ const en: Dictionary = {
   header: {
     left: 'left',
     daysRemaining: '{days} days remaining',
+    setIncomeHint: 'Set your income to see how much you have spent and days left until payday',
   },
   operations: {
     emptyTitle: 'No transactions yet',
