@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+enum OperationType {
+  INCOME
+  EXPENSE
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  name      String
+  type      CategoryType @default(EXPENSE)
+  icon      String
+  color     String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  operations Operation[]
+  budgets    BudgetLimit[]
+}
+
+model Operation {
+  id            String        @id @default(cuid())
+  title         String
+  description   String?
+  amount        Float
+  type          OperationType
+  date          DateTime
+  paymentMethod String        @default("cash")
+  categoryId    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+}
+
+model BudgetLimit {
+  id         String   @id @default(cuid())
+  categoryId String
+  month      String
+  amount     Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, month])
+}
