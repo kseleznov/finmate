@@ -1,11 +1,13 @@
 'use client';
 
 import { SignInForm, SignUpForm } from '@/features/auth';
+import { CURRENCIES, useCurrency } from '@/entities/currency';
 import { useProfile } from '../model/useProfile';
 import styles from './Profile.module.css';
 
 export function Profile() {
   const { user, isAuthenticated, logout, mode, setMode } = useProfile();
+  const { currency, setCurrency } = useCurrency();
 
   if (!isAuthenticated || !user) {
     return (
@@ -36,16 +38,24 @@ export function Profile() {
     <div className={styles.profileCard}>
       <div className={styles.avatar}>{user.email[0]?.toUpperCase()}</div>
       <div className={styles.email}>{user.email}</div>
-      <div className={styles.hint}>Твой аккаунт Finmate</div>
 
       <div className={styles.settingsList}>
         <div className={styles.settingsRow}>
           <span>Валюта</span>
-          <span className={styles.settingsValue}>EUR</span>
-        </div>
-        <div className={styles.settingsRow}>
-          <span>Уведомления</span>
-          <span className={styles.settingsValue}>Включены</span>
+          <div className={styles.currencyGroup}>
+            {CURRENCIES.map((item) => (
+              <button
+                key={item.code}
+                type="button"
+                className={`${styles.currencyButton} ${
+                  currency === item.code ? styles.currencyButtonActive : ''
+                }`}
+                onClick={() => setCurrency(item.code)}
+              >
+                {item.code}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

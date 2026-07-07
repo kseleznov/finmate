@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
+import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
+import { useCurrency } from '@/entities/currency';
 
 interface OperationDto {
   id: string;
@@ -42,6 +44,7 @@ function formatGroupDate(dateString: string) {
 }
 
 export function useOperationsList() {
+  const { currency } = useCurrency();
   const [operations, setOperations] = useState<OperationDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -64,8 +67,7 @@ export function useOperationsList() {
   }, []);
 
   function formatAmount(amount: number) {
-    const sign = amount < 0 ? '-' : '';
-    return `${sign}${new Intl.NumberFormat('ru-RU').format(Math.abs(amount))} €`;
+    return formatCurrencyAmount(amount, currency);
   }
 
   const groups: { date: string; operations: DisplayOperation[] }[] = [];
