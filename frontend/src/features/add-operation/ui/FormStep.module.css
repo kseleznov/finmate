@@ -112,6 +112,12 @@
   color: #6d28d9;
 }
 
+.error {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ef4444;
+}
+
 .submitButton {
   border: none;
   border-radius: 999px;
@@ -122,4 +128,10 @@
   background: #8b7cf0;
   cursor: pointer;
   box-shadow: 0 16px 32px rgba(109, 40, 217, 0.28);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
 }

@@ -1,9 +1,15 @@
+'use client';
+
 import { useOperationsList } from '../model/useOperationsList';
 import { OperationCard } from '@/entities/operation-card';
 import styles from './OperationsList.module.css';
 
 export function OperationsList() {
-  const { formatAmount, groups } = useOperationsList();
+  const { formatAmount, groups, isLoading } = useOperationsList();
+
+  if (isLoading) {
+    return null;
+  }
 
   if (groups.length === 0) {
     return (
@@ -24,7 +30,7 @@ export function OperationsList() {
           <div className={styles.items}>
             {group.operations.map((operation) => (
               <OperationCard
-                key={operation.title}
+                key={operation.id}
                 title={operation.title}
                 subtitle={operation.subtitle}
                 icon={operation.icon}
