@@ -7,6 +7,10 @@ import { BudgetLimitsList } from './BudgetLimitsList';
 export function Budget() {
   const vm = useBudget();
 
+  if (vm.isLoading) {
+    return null;
+  }
+
   return (
     <>
       <BudgetSummary

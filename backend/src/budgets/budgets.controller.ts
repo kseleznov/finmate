@@ -3,6 +3,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../auth/decorators/current-user.decorator';
 import { BudgetsService } from './budgets.service';
 import { CreateBudgetDto } from './dto/create-budget.dto';
+import { UpsertIncomeDto } from './dto/upsert-income.dto';
 
 @Controller('budgets')
 export class BudgetsController {
@@ -22,5 +23,21 @@ export class BudgetsController {
     @Body() createBudgetDto: CreateBudgetDto,
   ) {
     return this.budgetsService.upsert(user.userId, createBudgetDto);
+  }
+
+  @Get('income')
+  getIncome(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query('month') month: string,
+  ) {
+    return this.budgetsService.getIncome(user.userId, month);
+  }
+
+  @Post('income')
+  upsertIncome(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() upsertIncomeDto: UpsertIncomeDto,
+  ) {
+    return this.budgetsService.upsertIncome(user.userId, upsertIncomeDto);
   }
 }

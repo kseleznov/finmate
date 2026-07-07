@@ -23,9 +23,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  categories Category[]
-  operations Operation[]
-  budgets    BudgetLimit[]
+  categories     Category[]
+  operations     Operation[]
+  budgets        BudgetLimit[]
+  monthlyIncomes MonthlyIncome[]
 }
 
 model Category {
@@ -73,4 +74,17 @@ model BudgetLimit {
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, month, userId])
+}
+
+model MonthlyIncome {
+  id        String   @id @default(cuid())
+  userId    String
+  month     String
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month])
 }
