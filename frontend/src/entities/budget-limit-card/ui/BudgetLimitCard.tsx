@@ -40,7 +40,8 @@ export function BudgetLimitCard({
           <input
             type="number"
             className={styles.input}
-            value={limit}
+            placeholder="0"
+            value={limit === 0 ? '' : limit}
             onChange={(event) => onChangeLimit(Number(event.target.value) || 0)}
             onBlur={onFinishEdit}
             onKeyDown={(event) => event.key === 'Enter' && onFinishEdit()}
