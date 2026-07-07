@@ -5,6 +5,7 @@ import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
 import { useTranslation } from '@/entities/locale';
+import { useAuth } from '@/entities/user';
 
 interface OperationDto {
   id: string;
@@ -51,6 +52,7 @@ function formatGroupDate(
 export function useOperationsList() {
   const { currency } = useCurrency();
   const { t, intlLocale } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const [operations, setOperations] = useState<OperationDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -58,6 +60,15 @@ export function useOperationsList() {
     let cancelled = false;
 
     async function load() {
+      if (!isAuthenticated) {
+        await Promise.resolve();
+        if (cancelled) return;
+
+        setOperations([]);
+        setIsLoading(false);
+        return;
+      }
+
       const data = await apiFetch<OperationDto[]>('/operations');
       if (cancelled) return;
 
@@ -70,7 +81,7 @@ export function useOperationsList() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isAuthenticated]);
 
   function formatAmount(amount: number) {
     return formatCurrencyAmount(amount, currency, intlLocale);

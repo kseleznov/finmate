@@ -34,7 +34,8 @@ export function FormStep({
             id="amount"
             type="number"
             className={styles.amountInput}
-            value={amount}
+            placeholder="0"
+            value={amount === 0 ? '' : amount}
             onChange={(event) => setAmount(Number(event.target.value) || 0)}
           />
           <div className={styles.stepper}>

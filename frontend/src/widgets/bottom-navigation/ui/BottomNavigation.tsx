@@ -5,7 +5,8 @@ import { useBottomNavigation } from '../model/useBottomNavigation';
 import styles from './BottomNavigation.module.css';
 
 export function BottomNavigation() {
-  const { active, firstItem, secondItem, thirdItem, fourthItem, addAria } = useBottomNavigation();
+  const { active, firstItem, secondItem, thirdItem, fourthItem, addAria, addHref } =
+    useBottomNavigation();
 
   return (
     <nav className={styles.bottomNav}>
@@ -20,7 +21,7 @@ export function BottomNavigation() {
         </Link>
       ))}
 
-      <Link href="/add" className={styles.plusButton} aria-label={addAria}>
+      <Link href={addHref} className={styles.plusButton} aria-label={addAria}>
         +
       </Link>
 

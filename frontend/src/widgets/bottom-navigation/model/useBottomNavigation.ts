@@ -1,5 +1,6 @@
 import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/entities/locale';
+import { useAuth } from '@/entities/user';
 import { BudgetIcon } from '../ui/BudgetIcon';
 import { OperationsIcon } from '../ui/OperationsIcon';
 import { OverviewIcon } from '../ui/OverviewIcon';
@@ -7,6 +8,7 @@ import { ProfileIcon } from '../ui/ProfileIcon';
 
 export function useBottomNavigation() {
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
 
   const items = [
     { id: 'overview', label: t('nav.overview'), href: '/overview', Icon: OverviewIcon },
@@ -19,6 +21,7 @@ export function useBottomNavigation() {
   const active = items.find((item) => item.href === pathname)?.id ?? 'overview';
   const [firstItem, secondItem, thirdItem, fourthItem] = items;
   const addAria = t('nav.addAria');
+  const addHref = isAuthenticated ? '/add' : '/profile';
 
-  return { active, firstItem, secondItem, thirdItem, fourthItem, addAria };
+  return { active, firstItem, secondItem, thirdItem, fourthItem, addAria, addHref };
 }

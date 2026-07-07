@@ -81,14 +81,6 @@ export function Donut() {
           </div>
         </div>
       </div>
-
-      <div className={styles.hintText}>
-        {isEmpty
-          ? t('donut.noExpenses')
-          : selected === null
-            ? t('donut.clickSegment')
-            : t('donut.clickAgain')}
-      </div>
     </div>
   );
 }

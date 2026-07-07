@@ -28,6 +28,8 @@ type Dictionary = typeof ru;
 const ru = {
   common: {
     genericError: 'Что-то пошло не так',
+    save: 'Сохранить',
+    cancel: 'Отмена',
   },
   nav: {
     overview: 'Обзор',
@@ -45,8 +47,10 @@ const ru = {
     signIn: 'Войти',
     signUp: 'Регистрация',
     email: 'Email',
+    username: 'Имя пользователя',
     password: 'Пароль',
     emailPlaceholder: 'you@example.com',
+    usernamePlaceholder: 'ivan_petrov',
     passwordPlaceholderSignIn: '••••••••',
     passwordPlaceholderSignUp: 'Минимум 8 символов',
     signInLoading: 'Входим…',
@@ -54,11 +58,15 @@ const ru = {
     signInError: 'Не удалось войти',
     signUpError: 'Не удалось зарегистрироваться',
     passwordTooShort: 'Пароль должен быть не короче {min} символов',
+    usernameTooShort: 'Имя пользователя должно быть не короче {min} символов',
+    usernameInvalid: 'Только латинские буквы, цифры, точка, дефис и подчёркивание',
   },
   profile: {
     currency: 'Валюта',
     language: 'Язык',
     logout: 'Выйти',
+    editUsername: 'Изменить имя пользователя',
+    usernameTaken: 'Это имя пользователя уже занято',
   },
   addOperation: {
     title: 'Добавить операцию',
@@ -93,6 +101,7 @@ const ru = {
     remaining: 'Осталось {amount}',
     collapse: 'Свернуть',
     showAll: 'Показать все',
+    emptyHint: 'Распределите лимиты для категорий, чтобы отобразить их здесь',
   },
   donut: {
     noExpenses: 'Пока нет расходов',
@@ -104,6 +113,8 @@ const ru = {
   header: {
     left: 'осталось',
     daysRemaining: 'дней осталось: {days}',
+    setIncomeHint:
+      'Установите доход, чтобы знать сколько денег потрачено и сколько дней до следующей зарплаты',
   },
   operations: {
     emptyTitle: 'Пока нет операций',
@@ -111,11 +122,18 @@ const ru = {
     today: 'Сегодня',
     yesterday: 'Вчера',
   },
+  welcome: {
+    tagline: 'Ваши финансы под контролем',
+    description:
+      'Учитывайте расходы, планируйте бюджет по категориям и следите за тратами — всё в одном приложении.',
+  },
 };
 
 const en: Dictionary = {
   common: {
     genericError: 'Something went wrong',
+    save: 'Save',
+    cancel: 'Cancel',
   },
   nav: {
     overview: 'Overview',
@@ -133,8 +151,10 @@ const en: Dictionary = {
     signIn: 'Sign in',
     signUp: 'Sign up',
     email: 'Email',
+    username: 'Username',
     password: 'Password',
     emailPlaceholder: 'you@example.com',
+    usernamePlaceholder: 'ivan_petrov',
     passwordPlaceholderSignIn: '••••••••',
     passwordPlaceholderSignUp: 'Minimum 8 characters',
     signInLoading: 'Signing in…',
@@ -142,11 +162,15 @@ const en: Dictionary = {
     signInError: 'Could not sign in',
     signUpError: 'Could not sign up',
     passwordTooShort: 'Password must be at least {min} characters',
+    usernameTooShort: 'Username must be at least {min} characters',
+    usernameInvalid: 'Only letters, numbers, dot, dash and underscore are allowed',
   },
   profile: {
     currency: 'Currency',
     language: 'Language',
     logout: 'Log out',
+    editUsername: 'Edit username',
+    usernameTaken: 'This username is already taken',
   },
   addOperation: {
     title: 'Add operation',
@@ -181,6 +205,7 @@ const en: Dictionary = {
     remaining: 'Remaining {amount}',
     collapse: 'Collapse',
     showAll: 'Show all',
+    emptyHint: 'Set category limits in your budget to see them here',
   },
   donut: {
     noExpenses: 'No expenses yet',
@@ -192,12 +217,18 @@ const en: Dictionary = {
   header: {
     left: 'left',
     daysRemaining: '{days} days remaining',
+    setIncomeHint: 'Set your income to see how much you have spent and days left until payday',
   },
   operations: {
     emptyTitle: 'No transactions yet',
     emptySubtitle: 'Your expenses will show up here once you add one',
     today: 'Today',
     yesterday: 'Yesterday',
+  },
+  welcome: {
+    tagline: 'Your finances, under control',
+    description:
+      'Track expenses, plan your budget by category, and keep an eye on your spending — all in one app.',
   },
 };
 

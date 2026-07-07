@@ -5,8 +5,17 @@ import { useSignUpForm } from '../model/useSignUpForm';
 import styles from './AuthForm.module.css';
 
 export function SignUpForm() {
-  const { email, setEmail, password, setPassword, error, isSubmitting, handleSubmit } =
-    useSignUpForm();
+  const {
+    email,
+    setEmail,
+    username,
+    setUsername,
+    password,
+    setPassword,
+    error,
+    isSubmitting,
+    handleSubmit,
+  } = useSignUpForm();
   const { t } = useTranslation();
 
   return (
@@ -24,6 +33,22 @@ export function SignUpForm() {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="signup-username">
+          {t('auth.username')}
+        </label>
+        <input
+          id="signup-username"
+          type="text"
+          className={styles.input}
+          placeholder={t('auth.usernamePlaceholder')}
+          autoComplete="username"
+          required
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
         />
       </div>
 

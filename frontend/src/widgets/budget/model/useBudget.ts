@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
+import { DEFAULT_EXPENSE_CATEGORIES } from '@/shared/lib/defaultCategories';
 import { useCurrency } from '@/entities/currency';
 import { useLocale } from '@/entities/locale';
+import { useAuth } from '@/entities/user';
 
 interface CategoryDto {
   id: string;
@@ -38,8 +41,10 @@ function getCurrentMonth() {
 
 export function useBudget() {
   const month = getCurrentMonth();
+  const router = useRouter();
   const { currency } = useCurrency();
   const { intlLocale } = useLocale();
+  const { isAuthenticated } = useAuth();
   const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency, intlLocale);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +58,24 @@ export function useBudget() {
     let cancelled = false;
 
     async function load() {
+      if (!isAuthenticated) {
+        await Promise.resolve();
+        if (cancelled) return;
+
+        setCategories(
+          DEFAULT_EXPENSE_CATEGORIES.map((category) => ({
+            id: category.name,
+            title: category.name,
+            icon: category.icon,
+            color: category.color,
+            limit: 0,
+          }))
+        );
+        setIncome(0);
+        setIsLoading(false);
+        return;
+      }
+
       const [categoriesRes, limitsRes, incomeRes] = await Promise.all([
         apiFetch<CategoryDto[]>('/categories?type=EXPENSE'),
         apiFetch<BudgetLimitDto[]>(`/budgets?month=${month}`),
@@ -63,15 +86,17 @@ export function useBudget() {
 
       const limitByCategoryId = new Map(limitsRes.map((limit) => [limit.categoryId, limit.amount]));
 
-      setCategories(
-        categoriesRes.map((category) => ({
-          id: category.id,
-          title: category.name,
-          icon: category.icon,
-          color: category.color,
-          limit: limitByCategoryId.get(category.id) ?? 0,
-        }))
-      );
+      const mapped = categoriesRes.map((category) => ({
+        id: category.id,
+        title: category.name,
+        icon: category.icon,
+        color: category.color,
+        limit: limitByCategoryId.get(category.id) ?? 0,
+      }));
+
+      mapped.sort((a, b) => Number(b.limit > 0) - Number(a.limit > 0));
+
+      setCategories(mapped);
       setIncome(incomeRes.amount);
       setIsLoading(false);
     }
@@ -81,12 +106,17 @@ export function useBudget() {
     return () => {
       cancelled = true;
     };
-  }, [month]);
+  }, [month, isAuthenticated]);
 
   const setIsEditingIncome = (value: boolean) => {
+    if (value && !isAuthenticated) {
+      router.push('/profile');
+      return;
+    }
+
     setIsEditingIncomeState(value);
 
-    if (!value) {
+    if (!value && isAuthenticated) {
       apiFetch('/budgets/income', {
         method: 'POST',
         body: JSON.stringify({ month, amount: income }),
@@ -101,10 +131,15 @@ export function useBudget() {
   };
 
   const setEditingCategoryId = (id: string | null) => {
+    if (id !== null && !isAuthenticated) {
+      router.push('/profile');
+      return;
+    }
+
     const previousId = editingCategoryId;
     setEditingCategoryIdState(id);
 
-    if (id === null && previousId) {
+    if (id === null && previousId && isAuthenticated) {
       const category = categories.find((item) => item.id === previousId);
       if (category) {
         apiFetch('/budgets', {
