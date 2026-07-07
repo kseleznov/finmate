@@ -1,9 +1,30 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { apiFetch } from '@/shared/api/client';
+
+interface CategoryBreakdownDto {
+  categoryName: string;
+  icon: string;
+  color: string;
+  spent: number;
+}
+
+interface DashboardSummaryDto {
+  expenses: number;
+  categoryBreakdown: CategoryBreakdownDto[];
+}
+
+function getCurrentMonth() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
 
 export function useDonut() {
-  const data: { name: string; value: number; color: string; icon: string }[] = [];
-
-  const totalAmount = 0;
+  const [data, setData] = useState<{ name: string; value: number; color: string; icon: string }[]>(
+    []
+  );
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const RADIAN = Math.PI / 180;
 
@@ -19,7 +40,36 @@ export function useDonut() {
 
   const [selected, setSelected] = useState<number | null>(null);
 
-  const handleClick = (dataItem: any, index: number) => {
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      const summary = await apiFetch<DashboardSummaryDto>(
+        `/dashboard/summary?month=${getCurrentMonth()}`
+      );
+      if (cancelled) return;
+
+      const spentCategories = summary.categoryBreakdown.filter((category) => category.spent > 0);
+
+      setData(
+        spentCategories.map((category) => ({
+          name: category.categoryName,
+          value: summary.expenses > 0 ? Math.round((category.spent / summary.expenses) * 100) : 0,
+          color: category.color,
+          icon: category.icon,
+        }))
+      );
+      setTotalAmount(summary.expenses);
+    }
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleClick = (_dataItem: unknown, index: number) => {
     if (selected === index) {
       setSelected(null);
     } else {

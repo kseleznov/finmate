@@ -21,9 +21,11 @@ export class DashboardService {
       include: { category: true },
     });
 
-    const income = operations
-      .filter((op) => op.type === 'INCOME')
-      .reduce((sum, op) => sum + op.amount, 0);
+    const monthlyIncome = await this.prisma.monthlyIncome.findUnique({
+      where: { userId_month: { userId, month: targetMonth } },
+    });
+
+    const income = monthlyIncome?.amount ?? 0;
     const expenses = operations
       .filter((op) => op.type === 'EXPENSE')
       .reduce((sum, op) => sum + op.amount, 0);
@@ -38,6 +40,8 @@ export class DashboardService {
       return {
         categoryId: limit.categoryId,
         categoryName: limit.category.name,
+        icon: limit.category.icon,
+        color: limit.category.color,
         limit: limit.amount,
         spent,
         remaining: limit.amount - spent,

@@ -1,3 +1,5 @@
+'use client';
+
 import { Logo } from '@/shared/ui/Logo';
 import { useHeader } from '../model/useHeader';
 import styles from './Header.module.css';
