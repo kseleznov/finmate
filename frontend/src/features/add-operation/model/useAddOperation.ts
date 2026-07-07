@@ -7,11 +7,14 @@ import { apiFetch, ApiError } from '@/shared/api/client';
 
 type Step = 'choose' | 'manual';
 
-interface CategoryDto {
-  id: string;
-  name: string;
-  icon: string;
-  color: string;
+interface BudgetLimitDto {
+  amount: number;
+  category: {
+    id: string;
+    name: string;
+    icon: string;
+    color: string;
+  };
 }
 
 interface DisplayCategory {
@@ -19,6 +22,11 @@ interface DisplayCategory {
   label: string;
   icon: string;
   color: string;
+}
+
+function getCurrentMonth() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 }
 
 export function useAddOperation() {
@@ -36,16 +44,18 @@ export function useAddOperation() {
     let cancelled = false;
 
     async function load() {
-      const data = await apiFetch<CategoryDto[]>('/categories?type=EXPENSE');
+      const data = await apiFetch<BudgetLimitDto[]>(`/budgets?month=${getCurrentMonth()}`);
       if (cancelled) return;
 
       setCategories(
-        data.map((category) => ({
-          id: category.id,
-          label: category.name,
-          icon: category.icon,
-          color: category.color,
-        }))
+        data
+          .filter((limit) => limit.amount > 0)
+          .map((limit) => ({
+            id: limit.category.id,
+            label: limit.category.name,
+            icon: limit.category.icon,
+            color: limit.category.color,
+          }))
       );
     }
 
