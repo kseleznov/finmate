@@ -111,6 +111,11 @@ const ru = {
     today: 'Сегодня',
     yesterday: 'Вчера',
   },
+  welcome: {
+    tagline: 'Ваши финансы под контролем',
+    description:
+      'Учитывайте расходы, планируйте бюджет по категориям и следите за тратами — всё в одном приложении.',
+  },
 };
 
 const en: Dictionary = {
@@ -198,6 +203,11 @@ const en: Dictionary = {
     emptySubtitle: 'Your expenses will show up here once you add one',
     today: 'Today',
     yesterday: 'Yesterday',
+  },
+  welcome: {
+    tagline: 'Your finances, under control',
+    description:
+      'Track expenses, plan your budget by category, and keep an eye on your spending — all in one app.',
   },
 };
 

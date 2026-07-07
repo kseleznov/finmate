@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import styles from './page.module.css';
 import { Profile } from '@/widgets/profile';
 import { BottomNavigation } from '@/widgets/bottom-navigation';
@@ -12,7 +13,9 @@ export default function ProfilePage() {
     <main className={styles.container}>
       <h1 className={styles.title}>{t('pages.profile')}</h1>
 
-      <Profile />
+      <Suspense fallback={null}>
+        <Profile />
+      </Suspense>
 
       <BottomNavigation />
     </main>
