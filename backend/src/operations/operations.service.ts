@@ -8,11 +8,12 @@ export class OperationsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(
+    userId: string,
     month?: string,
     type?: 'INCOME' | 'EXPENSE',
     categoryId?: string,
   ) {
-    const where: Record<string, unknown> = {};
+    const where: Record<string, unknown> = { userId };
 
     if (type) {
       where.type = type;
@@ -36,20 +37,27 @@ export class OperationsService {
     });
   }
 
-  create(createOperationDto: CreateOperationDto) {
+  create(userId: string, createOperationDto: CreateOperationDto) {
     return this.prisma.operation.create({
       data: {
         ...createOperationDto,
         date: new Date(createOperationDto.date),
         paymentMethod: createOperationDto.paymentMethod ?? 'cash',
         type: createOperationDto.type,
+        userId,
       },
       include: { category: true },
     });
   }
 
-  async update(id: string, updateOperationDto: UpdateOperationDto) {
-    const existing = await this.prisma.operation.findUnique({ where: { id } });
+  async update(
+    userId: string,
+    id: string,
+    updateOperationDto: UpdateOperationDto,
+  ) {
+    const existing = await this.prisma.operation.findFirst({
+      where: { id, userId },
+    });
     if (!existing) {
       throw new NotFoundException(`Operation with id ${id} not found`);
     }
@@ -66,8 +74,10 @@ export class OperationsService {
     });
   }
 
-  async remove(id: string) {
-    const existing = await this.prisma.operation.findUnique({ where: { id } });
+  async remove(userId: string, id: string) {
+    const existing = await this.prisma.operation.findFirst({
+      where: { id, userId },
+    });
     if (!existing) {
       throw new NotFoundException(`Operation with id ${id} not found`);
     }

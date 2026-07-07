@@ -5,19 +5,19 @@ import { PrismaService } from '../prisma/prisma.service';
 export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getSummary(month?: string) {
+  async getSummary(userId: string, month?: string) {
     const targetMonth = month ?? this.getCurrentMonth();
     const [year, monthNumber] = targetMonth.split('-').map(Number);
     const start = new Date(Date.UTC(year, monthNumber - 1, 1));
     const end = new Date(Date.UTC(year, monthNumber, 0, 23, 59, 59, 999));
 
     const operations = await this.prisma.operation.findMany({
-      where: { date: { gte: start, lte: end } },
+      where: { userId, date: { gte: start, lte: end } },
       include: { category: true },
     });
 
     const budgetLimits = await this.prisma.budgetLimit.findMany({
-      where: { month: targetMonth },
+      where: { userId, month: targetMonth },
       include: { category: true },
     });
 

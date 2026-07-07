@@ -6,22 +6,21 @@ import { CreateBudgetDto } from './dto/create-budget.dto';
 export class BudgetsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll(month?: string) {
-    const where = month ? { month } : undefined;
-
+  findAll(userId: string, month?: string) {
     return this.prisma.budgetLimit.findMany({
-      where,
+      where: { userId, ...(month ? { month } : {}) },
       include: { category: true },
       orderBy: { createdAt: 'asc' },
     });
   }
 
-  async upsert(createBudgetDto: CreateBudgetDto) {
+  async upsert(userId: string, createBudgetDto: CreateBudgetDto) {
     return this.prisma.budgetLimit.upsert({
       where: {
-        categoryId_month: {
+        categoryId_month_userId: {
           categoryId: createBudgetDto.categoryId,
           month: createBudgetDto.month,
+          userId,
         },
       },
       update: { amount: createBudgetDto.amount },
@@ -29,6 +28,7 @@ export class BudgetsService {
         categoryId: createBudgetDto.categoryId,
         month: createBudgetDto.month,
         amount: createBudgetDto.amount,
+        userId,
       },
       include: { category: true },
     });

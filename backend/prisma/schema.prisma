@@ -16,15 +16,29 @@ enum OperationType {
   EXPENSE
 }
 
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  categories Category[]
+  operations Operation[]
+  budgets    BudgetLimit[]
+}
+
 model Category {
   id        String       @id @default(cuid())
   name      String
   type      CategoryType @default(EXPENSE)
   icon      String
   color     String
+  userId    String
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   operations Operation[]
   budgets    BudgetLimit[]
 }
@@ -38,21 +52,25 @@ model Operation {
   date          DateTime
   paymentMethod String        @default("cash")
   categoryId    String?
+  userId        String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 }
 
 model BudgetLimit {
   id         String   @id @default(cuid())
   categoryId String
+  userId     String
   month      String
   amount     Float
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  @@unique([categoryId, month])
+  @@unique([categoryId, month, userId])
 }
