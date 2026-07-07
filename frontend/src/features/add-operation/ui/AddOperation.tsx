@@ -24,7 +24,7 @@ export function AddOperation() {
             <ChevronLeftIcon />
           </button>
         ) : (
-          <Link href="/" className={styles.closeLink} aria-label="Close">
+          <Link href="/overview" className={styles.closeLink} aria-label="Close">
             <CloseIcon />
           </Link>
         )}

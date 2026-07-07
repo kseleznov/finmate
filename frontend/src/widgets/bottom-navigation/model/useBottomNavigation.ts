@@ -6,7 +6,7 @@ import { ProfileIcon } from '../ui/ProfileIcon';
 
 export function useBottomNavigation() {
   const items = [
-    { id: 'overview', label: 'Обзор', href: '/', Icon: OverviewIcon },
+    { id: 'overview', label: 'Обзор', href: '/overview', Icon: OverviewIcon },
     { id: 'operations', label: 'Operations', href: '/operations', Icon: OperationsIcon },
     { id: 'budget', label: 'Бюджет', href: '/budget', Icon: BudgetIcon },
     { id: 'profile', label: 'Профиль', href: '/profile', Icon: ProfileIcon },
