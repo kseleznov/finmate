@@ -1,22 +1,93 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { apiFetch } from '@/shared/api/client';
+
+interface CategoryDto {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+}
+
+interface BudgetLimitDto {
+  categoryId: string;
+  amount: number;
+}
+
+interface IncomeDto {
+  month: string;
+  amount: number;
+}
+
+interface BudgetCategory {
+  id: string;
+  title: string;
+  icon: string;
+  color: string;
+  limit: number;
+}
+
+function getCurrentMonth() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
 
 export function useBudget() {
+  const month = getCurrentMonth();
   const formatAmount = (amount: number) => new Intl.NumberFormat('ru-RU').format(amount) + ' €';
 
+  const [isLoading, setIsLoading] = useState(true);
   const [income, setIncome] = useState(0);
-  const [isEditingIncome, setIsEditingIncome] = useState(false);
+  const [isEditingIncome, setIsEditingIncomeState] = useState(false);
 
-  const [categories, setCategories] = useState([
-    { id: 'food', title: 'Food/Cafe', icon: '☕️', color: '#f59e0b', limit: 0 },
-    { id: 'groceries', title: 'Groceries', icon: '🛒', color: '#12b76a', limit: 0 },
-    { id: 'entertainment', title: 'Entertainment', icon: '🎬', color: '#8b5cf6', limit: 0 },
-    { id: 'transport', title: 'Transport', icon: '🚗', color: '#3b82f6', limit: 0 },
-    { id: 'shopping', title: 'Shopping', icon: '🛍️', color: '#e91e8c', limit: 0 },
-    { id: 'health', title: 'Health', icon: '❤️', color: '#ef4444', limit: 0 },
-    { id: 'utilities', title: 'Utilities', icon: '📄', color: '#4b5563', limit: 0 },
-  ]);
+  const [categories, setCategories] = useState<BudgetCategory[]>([]);
+  const [editingCategoryId, setEditingCategoryIdState] = useState<string | null>(null);
 
-  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      const [categoriesRes, limitsRes, incomeRes] = await Promise.all([
+        apiFetch<CategoryDto[]>('/categories?type=EXPENSE'),
+        apiFetch<BudgetLimitDto[]>(`/budgets?month=${month}`),
+        apiFetch<IncomeDto>(`/budgets/income?month=${month}`),
+      ]);
+
+      if (cancelled) return;
+
+      const limitByCategoryId = new Map(limitsRes.map((limit) => [limit.categoryId, limit.amount]));
+
+      setCategories(
+        categoriesRes.map((category) => ({
+          id: category.id,
+          title: category.name,
+          icon: category.icon,
+          color: category.color,
+          limit: limitByCategoryId.get(category.id) ?? 0,
+        }))
+      );
+      setIncome(incomeRes.amount);
+      setIsLoading(false);
+    }
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [month]);
+
+  const setIsEditingIncome = (value: boolean) => {
+    setIsEditingIncomeState(value);
+
+    if (!value) {
+      apiFetch('/budgets/income', {
+        method: 'POST',
+        body: JSON.stringify({ month, amount: income }),
+      }).catch(() => {});
+    }
+  };
 
   const updateCategoryLimit = (id: string, limit: number) => {
     setCategories((prev) =>
@@ -24,10 +95,26 @@ export function useBudget() {
     );
   };
 
+  const setEditingCategoryId = (id: string | null) => {
+    const previousId = editingCategoryId;
+    setEditingCategoryIdState(id);
+
+    if (id === null && previousId) {
+      const category = categories.find((item) => item.id === previousId);
+      if (category) {
+        apiFetch('/budgets', {
+          method: 'POST',
+          body: JSON.stringify({ categoryId: previousId, month, amount: category.limit }),
+        }).catch(() => {});
+      }
+    }
+  };
+
   const allocated = categories.reduce((sum, category) => sum + category.limit, 0);
   const leftToAllocate = income - allocated;
 
   return {
+    isLoading,
     formatAmount,
     income,
     setIncome,
