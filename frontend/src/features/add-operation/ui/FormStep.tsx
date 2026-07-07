@@ -1,3 +1,5 @@
+import { useCurrency } from '@/entities/currency';
+import { getCurrencySymbol } from '@/shared/lib/currency';
 import type { useAddOperation } from '../model/useAddOperation';
 import styles from './FormStep.module.css';
 
@@ -17,11 +19,13 @@ export function FormStep({
   error,
   isSubmitting,
 }: Props) {
+  const { currency } = useCurrency();
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.field}>
         <label className={styles.label} htmlFor="amount">
-          Amount (€)
+          Amount ({getCurrencySymbol(currency)})
         </label>
         <div className={styles.amountRow}>
           <input

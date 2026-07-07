@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
+import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
+import { useCurrency } from '@/entities/currency';
 
 interface CategoryBreakdownDto {
   categoryName: string;
@@ -21,6 +23,7 @@ function getCurrentMonth() {
 }
 
 export function useDonut() {
+  const { currency } = useCurrency();
   const [data, setData] = useState<{ name: string; value: number; color: string; icon: string }[]>(
     []
   );
@@ -28,7 +31,7 @@ export function useDonut() {
 
   const RADIAN = Math.PI / 180;
 
-  const formatAmount = (amount: number) => new Intl.NumberFormat('ru-RU').format(amount) + ' €';
+  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency);
 
   const hexToRgba = (hex: string, alpha: number) => {
     const value = parseInt(hex.replace('#', ''), 16);

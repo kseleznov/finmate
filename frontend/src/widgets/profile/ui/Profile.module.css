@@ -100,6 +100,27 @@
   font-weight: 500;
 }
 
+.currencyGroup {
+  display: flex;
+  gap: 4px;
+}
+
+.currencyButton {
+  border: none;
+  background: rgba(15, 23, 42, 0.04);
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.currencyButtonActive {
+  background: rgba(109, 40, 217, 0.12);
+  color: #6d28d9;
+}
+
 .logoutButton {
   width: 100%;
   margin-top: 24px;

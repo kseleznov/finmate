@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
+import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
+import { useCurrency } from '@/entities/currency';
 
 interface CategoryBreakdownDto {
   categoryName: string;
@@ -30,7 +32,8 @@ function getCurrentMonth() {
 }
 
 export function useCategoriesList() {
-  const formatAmount = (amount: number) => new Intl.NumberFormat('ru-RU').format(amount) + ' €';
+  const { currency } = useCurrency();
+  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency);
 
   const [categories, setCategories] = useState<DisplayCategory[]>([]);
   const VISIBLE_COUNT = 3;

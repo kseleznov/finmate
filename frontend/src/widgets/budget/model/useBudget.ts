@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
+import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
+import { useCurrency } from '@/entities/currency';
 
 interface CategoryDto {
   id: string;
@@ -35,7 +37,8 @@ function getCurrentMonth() {
 
 export function useBudget() {
   const month = getCurrentMonth();
-  const formatAmount = (amount: number) => new Intl.NumberFormat('ru-RU').format(amount) + ' €';
+  const { currency } = useCurrency();
+  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency);
 
   const [isLoading, setIsLoading] = useState(true);
   const [income, setIncome] = useState(0);

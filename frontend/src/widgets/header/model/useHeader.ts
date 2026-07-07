@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
+import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
+import { useCurrency } from '@/entities/currency';
 
 interface DashboardSummaryDto {
   income: number;
@@ -20,11 +22,12 @@ function getDaysRemainingInMonth() {
 }
 
 export function useHeader() {
+  const { currency } = useCurrency();
   const [spent, setSpent] = useState(0);
   const [total, setTotal] = useState(0);
 
   const daysRemaining = getDaysRemainingInMonth();
-  const formatAmount = (amount: number) => new Intl.NumberFormat('ru-RU').format(amount) + ' €';
+  const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency);
 
   useEffect(() => {
     let cancelled = false;
