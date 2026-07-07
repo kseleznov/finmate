@@ -32,7 +32,8 @@ export function BudgetSummary({
             <input
               type="number"
               className={styles.incomeInput}
-              value={income}
+              placeholder="0"
+              value={income === 0 ? '' : income}
               onChange={(event) => setIncome(Number(event.target.value) || 0)}
               onBlur={() => setIsEditingIncome(false)}
               onKeyDown={(event) => event.key === 'Enter' && setIsEditingIncome(false)}
