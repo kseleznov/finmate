@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { apiFetch, ApiError } from '@/shared/api/client';
 import { useAuth } from '@/entities/user';
+import { useTranslation } from '@/entities/locale';
 import type { StoredUser } from '@/shared/api/session';
 
 interface AuthResponse {
@@ -15,6 +16,7 @@ const MIN_PASSWORD_LENGTH = 8;
 
 export function useSignUpForm() {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +27,7 @@ export function useSignUpForm() {
     setError(null);
 
     if (password.length < MIN_PASSWORD_LENGTH) {
-      setError(`Пароль должен быть не короче ${MIN_PASSWORD_LENGTH} символов`);
+      setError(t('auth.passwordTooShort', { min: MIN_PASSWORD_LENGTH }));
       return;
     }
 
@@ -38,7 +40,7 @@ export function useSignUpForm() {
       });
       login(data.accessToken, data.user);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Не удалось зарегистрироваться');
+      setError(err instanceof ApiError ? err.message : t('auth.signUpError'));
     } finally {
       setIsSubmitting(false);
     }

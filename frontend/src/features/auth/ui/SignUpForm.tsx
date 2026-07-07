@@ -1,23 +1,25 @@
 'use client';
 
+import { useTranslation } from '@/entities/locale';
 import { useSignUpForm } from '../model/useSignUpForm';
 import styles from './AuthForm.module.css';
 
 export function SignUpForm() {
   const { email, setEmail, password, setPassword, error, isSubmitting, handleSubmit } =
     useSignUpForm();
+  const { t } = useTranslation();
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.field}>
         <label className={styles.label} htmlFor="signup-email">
-          Email
+          {t('auth.email')}
         </label>
         <input
           id="signup-email"
           type="email"
           className={styles.input}
-          placeholder="you@example.com"
+          placeholder={t('auth.emailPlaceholder')}
           autoComplete="email"
           required
           value={email}
@@ -27,13 +29,13 @@ export function SignUpForm() {
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="signup-password">
-          Пароль
+          {t('auth.password')}
         </label>
         <input
           id="signup-password"
           type="password"
           className={styles.input}
-          placeholder="Минимум 8 символов"
+          placeholder={t('auth.passwordPlaceholderSignUp')}
           autoComplete="new-password"
           required
           value={password}
@@ -44,7 +46,7 @@ export function SignUpForm() {
       {error && <span className={styles.error}>{error}</span>}
 
       <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-        {isSubmitting ? 'Создаём аккаунт…' : 'Sign up'}
+        {isSubmitting ? t('auth.signUpLoading') : t('auth.signUp')}
       </button>
     </form>
   );

@@ -1,5 +1,6 @@
 import { useCurrency } from '@/entities/currency';
 import { getCurrencySymbol } from '@/shared/lib/currency';
+import { useTranslation } from '@/entities/locale';
 import type { useAddOperation } from '../model/useAddOperation';
 import styles from './FormStep.module.css';
 
@@ -20,12 +21,13 @@ export function FormStep({
   isSubmitting,
 }: Props) {
   const { currency } = useCurrency();
+  const { t } = useTranslation();
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.field}>
         <label className={styles.label} htmlFor="amount">
-          Amount ({getCurrencySymbol(currency)})
+          {t('addOperation.amountLabel', { symbol: getCurrencySymbol(currency) })}
         </label>
         <div className={styles.amountRow}>
           <input
@@ -40,7 +42,7 @@ export function FormStep({
               type="button"
               className={styles.stepperButton}
               onClick={incrementAmount}
-              aria-label="Increase amount"
+              aria-label={t('addOperation.increaseAmount')}
             >
               ▲
             </button>
@@ -48,7 +50,7 @@ export function FormStep({
               type="button"
               className={styles.stepperButton}
               onClick={decrementAmount}
-              aria-label="Decrease amount"
+              aria-label={t('addOperation.decreaseAmount')}
             >
               ▼
             </button>
@@ -58,20 +60,20 @@ export function FormStep({
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="title">
-          What did you buy?
+          {t('addOperation.whatDidYouBuy')}
         </label>
         <input
           id="title"
           type="text"
           className={styles.textInput}
-          placeholder="e.g. Coffee at Starbucks"
+          placeholder={t('addOperation.titlePlaceholder')}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
       </div>
 
       <div className={styles.field}>
-        <span className={styles.label}>Category</span>
+        <span className={styles.label}>{t('addOperation.category')}</span>
         <div className={styles.categoryGrid}>
           {categories.map((category) => (
             <button
@@ -92,7 +94,7 @@ export function FormStep({
       {error && <span className={styles.error}>{error}</span>}
 
       <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-        {isSubmitting ? 'Saving…' : 'Add operation'}
+        {isSubmitting ? t('addOperation.saving') : t('addOperation.submit')}
       </button>
     </form>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
+import { useTranslation } from '@/entities/locale';
 
 interface OperationDto {
   id: string;
@@ -31,20 +32,25 @@ function isSameDay(a: Date, b: Date) {
   );
 }
 
-function formatGroupDate(dateString: string) {
+function formatGroupDate(
+  dateString: string,
+  intlLocale: string,
+  labels: { today: string; yesterday: string }
+) {
   const date = new Date(dateString);
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  if (isSameDay(date, today)) return 'Today';
-  if (isSameDay(date, yesterday)) return 'Yesterday';
+  if (isSameDay(date, today)) return labels.today;
+  if (isSameDay(date, yesterday)) return labels.yesterday;
 
-  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long' }).format(date);
+  return new Intl.DateTimeFormat(intlLocale, { day: 'numeric', month: 'long' }).format(date);
 }
 
 export function useOperationsList() {
   const { currency } = useCurrency();
+  const { t, intlLocale } = useTranslation();
   const [operations, setOperations] = useState<OperationDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -67,13 +73,16 @@ export function useOperationsList() {
   }, []);
 
   function formatAmount(amount: number) {
-    return formatCurrencyAmount(amount, currency);
+    return formatCurrencyAmount(amount, currency, intlLocale);
   }
 
   const groups: { date: string; operations: DisplayOperation[] }[] = [];
 
   for (const operation of operations) {
-    const label = formatGroupDate(operation.date);
+    const label = formatGroupDate(operation.date, intlLocale, {
+      today: t('operations.today'),
+      yesterday: t('operations.yesterday'),
+    });
     const displayOperation: DisplayOperation = {
       id: operation.id,
       title: operation.title,

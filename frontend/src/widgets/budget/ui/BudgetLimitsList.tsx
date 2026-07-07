@@ -1,4 +1,5 @@
 import { BudgetLimitCard } from '@/entities/budget-limit-card';
+import { useTranslation } from '@/entities/locale';
 import styles from './BudgetLimitsList.module.css';
 
 interface Category {
@@ -24,9 +25,11 @@ export function BudgetLimitsList({
   setEditingCategoryId,
   updateCategoryLimit,
 }: Props) {
+  const { t } = useTranslation();
+
   return (
     <section className={styles.section}>
-      <h2 className={styles.sectionTitle}>Category limits</h2>
+      <h2 className={styles.sectionTitle}>{t('budget.categoryLimits')}</h2>
 
       <div className={styles.list}>
         {categories.map((category) => (
@@ -38,6 +41,7 @@ export function BudgetLimitsList({
             amount={formatAmount(category.limit)}
             limit={category.limit}
             isEditing={editingCategoryId === category.id}
+            editAriaLabel={t('budget.editLimit', { title: category.title })}
             onChangeLimit={(value) => updateCategoryLimit(category.id, value)}
             onStartEdit={() => setEditingCategoryId(category.id)}
             onFinishEdit={() => setEditingCategoryId(null)}

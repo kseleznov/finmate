@@ -8,6 +8,7 @@ interface Props {
   amount: string;
   limit: number;
   isEditing: boolean;
+  editAriaLabel: string;
   onChangeLimit: (value: number) => void;
   onStartEdit: () => void;
   onFinishEdit: () => void;
@@ -20,6 +21,7 @@ export function BudgetLimitCard({
   amount,
   limit,
   isEditing,
+  editAriaLabel,
   onChangeLimit,
   onStartEdit,
   onFinishEdit,
@@ -51,7 +53,7 @@ export function BudgetLimitCard({
               type="button"
               className={styles.editButton}
               onClick={onStartEdit}
-              aria-label={`Edit ${title} limit`}
+              aria-label={editAriaLabel}
             >
               <PencilIcon />
             </button>

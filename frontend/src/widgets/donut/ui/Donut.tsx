@@ -1,11 +1,13 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { useTranslation } from '@/entities/locale';
 import styles from './Donut.module.css';
 import { useDonut } from '../model/useDonut';
 import { renderCalloutLabel } from '../model/renderCalloutLabel';
 
 export function Donut() {
+  const { t } = useTranslation();
   const {
     data,
     RADIAN,
@@ -82,10 +84,10 @@ export function Donut() {
 
       <div className={styles.hintText}>
         {isEmpty
-          ? 'No expenses yet'
+          ? t('donut.noExpenses')
           : selected === null
-            ? 'Click on a segment to see details'
-            : 'Click again to return to total'}
+            ? t('donut.clickSegment')
+            : t('donut.clickAgain')}
       </div>
     </div>
   );

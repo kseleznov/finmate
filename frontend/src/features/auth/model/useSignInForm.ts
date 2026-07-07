@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { apiFetch, ApiError } from '@/shared/api/client';
 import { useAuth } from '@/entities/user';
+import { useTranslation } from '@/entities/locale';
 import type { StoredUser } from '@/shared/api/session';
 
 interface AuthResponse {
@@ -13,6 +14,7 @@ interface AuthResponse {
 
 export function useSignInForm() {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ export function useSignInForm() {
       });
       login(data.accessToken, data.user);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Не удалось войти');
+      setError(err instanceof ApiError ? err.message : t('auth.signInError'));
     } finally {
       setIsSubmitting(false);
     }
