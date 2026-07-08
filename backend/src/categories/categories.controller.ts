@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../auth/decorators/current-user.decorator';
 import { CategoriesService } from './categories.service';
@@ -22,5 +30,10 @@ export class CategoriesController {
     @Body() createCategoryDto: CreateCategoryDto,
   ) {
     return this.categoriesService.create(user.userId, createCategoryDto);
+  }
+
+  @Delete(':id')
+  remove(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string) {
+    return this.categoriesService.remove(user.userId, id);
   }
 }

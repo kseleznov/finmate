@@ -1,6 +1,6 @@
 // Mirrors backend DEFAULT_CATEGORIES (backend/src/categories/default-categories.ts),
-// which every account gets on registration and can never delete — safe to use as a
-// logged-out placeholder so the budget page doesn't need an authenticated request.
+// which every account gets seeded on registration — safe to use as a logged-out
+// placeholder so the budget page doesn't need an authenticated request.
 export const DEFAULT_EXPENSE_CATEGORIES: { name: string; icon: string; color: string }[] = [
   { name: 'Food/Cafe', icon: '☕️', color: '#f59e0b' },
   { name: 'Groceries', icon: '🛒', color: '#12b76a' },

@@ -29,6 +29,11 @@ export function Budget() {
         editingCategoryId={vm.editingCategoryId}
         setEditingCategoryId={vm.setEditingCategoryId}
         updateCategoryLimit={vm.updateCategoryLimit}
+        onDeleteCategory={vm.deleteCategory}
+        isAddingCategory={vm.isAddingCategory}
+        setIsAddingCategory={vm.setIsAddingCategory}
+        addCategoryError={vm.addCategoryError}
+        onAddCategory={vm.addCategory}
       />
     </>
   );
