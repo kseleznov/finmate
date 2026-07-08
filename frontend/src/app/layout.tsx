@@ -5,7 +5,16 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Finmate',
-  description: 'Проект без стандартного шаблонного контента',
+  description: 'Отслеживание расходов и бюджета',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'Finmate',
+    statusBarStyle: 'default',
+  },
+  icons: {
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export const viewport: Viewport = {
@@ -13,6 +22,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   viewportFit: 'cover',
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({
