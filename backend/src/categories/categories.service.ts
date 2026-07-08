@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 
@@ -21,5 +21,17 @@ export class CategoriesService {
         userId,
       },
     });
+  }
+
+  async remove(userId: string, id: string) {
+    const existing = await this.prisma.category.findFirst({
+      where: { id, userId },
+    });
+    if (!existing) {
+      throw new NotFoundException(`Category with id ${id} not found`);
+    }
+
+    await this.prisma.category.delete({ where: { id } });
+    return { deleted: true, id };
   }
 }

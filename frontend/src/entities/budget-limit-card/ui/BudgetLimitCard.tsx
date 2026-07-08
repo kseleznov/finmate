@@ -1,4 +1,5 @@
 import { PencilIcon } from './PencilIcon';
+import { TrashIcon } from './TrashIcon';
 import styles from './BudgetLimitCard.module.css';
 
 interface Props {
@@ -9,9 +10,11 @@ interface Props {
   limit: number;
   isEditing: boolean;
   editAriaLabel: string;
+  deleteAriaLabel: string;
   onChangeLimit: (value: number) => void;
   onStartEdit: () => void;
   onFinishEdit: () => void;
+  onDelete: () => void;
 }
 
 export function BudgetLimitCard({
@@ -22,9 +25,11 @@ export function BudgetLimitCard({
   limit,
   isEditing,
   editAriaLabel,
+  deleteAriaLabel,
   onChangeLimit,
   onStartEdit,
   onFinishEdit,
+  onDelete,
 }: Props) {
   return (
     <div className={styles.card}>
@@ -57,6 +62,14 @@ export function BudgetLimitCard({
               aria-label={editAriaLabel}
             >
               <PencilIcon />
+            </button>
+            <button
+              type="button"
+              className={styles.deleteButton}
+              onClick={onDelete}
+              aria-label={deleteAriaLabel}
+            >
+              <TrashIcon />
             </button>
           </>
         )}

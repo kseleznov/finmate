@@ -30,6 +30,7 @@ const ru = {
     genericError: 'Что-то пошло не так',
     save: 'Сохранить',
     cancel: 'Отмена',
+    delete: 'Удалить',
   },
   nav: {
     overview: 'Обзор',
@@ -95,6 +96,17 @@ const ru = {
     leftToAllocate: 'Осталось распределить',
     categoryLimits: 'Лимиты по категориям',
     editLimit: 'Изменить лимит «{title}»',
+    deleteCategory: 'Удалить «{title}»',
+    deleteCategoryTitle: 'Удалить категорию?',
+    confirmDeleteCategory:
+      'Удалить категорию «{title}»? Лимиты по ней будут удалены, а операции останутся без категории.',
+    errorDeleteCategory: 'Не удалось удалить категорию',
+    addCategory: 'Добавить категорию',
+    categoryNamePlaceholder: 'Название категории',
+    categoryIconPlaceholder: 'Иконка',
+    categoryColorPlaceholder: 'Выбрать цвет',
+    errorAddCategory: 'Не удалось добавить категорию',
+    errorCategoryName: 'Введите название категории',
   },
   categories: {
     title: 'Категории',
@@ -134,6 +146,7 @@ const en: Dictionary = {
     genericError: 'Something went wrong',
     save: 'Save',
     cancel: 'Cancel',
+    delete: 'Delete',
   },
   nav: {
     overview: 'Overview',
@@ -199,6 +212,17 @@ const en: Dictionary = {
     leftToAllocate: 'Left to allocate',
     categoryLimits: 'Category limits',
     editLimit: 'Edit {title} limit',
+    deleteCategory: 'Delete {title}',
+    deleteCategoryTitle: 'Delete category?',
+    confirmDeleteCategory:
+      'Delete "{title}"? Its budget limits will be removed and transactions will keep no category.',
+    errorDeleteCategory: 'Could not delete the category',
+    addCategory: 'Add category',
+    categoryNamePlaceholder: 'Category name',
+    categoryIconPlaceholder: 'Icon',
+    categoryColorPlaceholder: 'Select color',
+    errorAddCategory: 'Could not add the category',
+    errorCategoryName: 'Enter a category name',
   },
   categories: {
     title: 'Categories',

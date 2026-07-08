@@ -53,6 +53,8 @@ export function useBudget() {
 
   const [categories, setCategories] = useState<BudgetCategory[]>([]);
   const [editingCategoryId, setEditingCategoryIdState] = useState<string | null>(null);
+  const [isAddingCategory, setIsAddingCategoryState] = useState(false);
+  const [addCategoryError, setAddCategoryError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -150,6 +152,52 @@ export function useBudget() {
     }
   };
 
+  const setIsAddingCategory = (value: boolean) => {
+    if (value && !isAuthenticated) {
+      router.push('/profile');
+      return;
+    }
+
+    setAddCategoryError(null);
+    setIsAddingCategoryState(value);
+  };
+
+  const addCategory = async (input: { name: string; icon: string; color: string }) => {
+    setAddCategoryError(null);
+
+    try {
+      const created = await apiFetch<CategoryDto>('/categories', {
+        method: 'POST',
+        body: JSON.stringify({ ...input, type: 'EXPENSE' }),
+      });
+
+      setCategories((prev) => [
+        ...prev,
+        { id: created.id, title: created.name, icon: created.icon, color: created.color, limit: 0 },
+      ]);
+      setIsAddingCategoryState(false);
+      return true;
+    } catch {
+      setAddCategoryError('errorAddCategory');
+      return false;
+    }
+  };
+
+  const deleteCategory = async (id: string) => {
+    if (!isAuthenticated) {
+      router.push('/profile');
+      return false;
+    }
+
+    try {
+      await apiFetch(`/categories/${id}`, { method: 'DELETE' });
+      setCategories((prev) => prev.filter((category) => category.id !== id));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const allocated = categories.reduce((sum, category) => sum + category.limit, 0);
   const leftToAllocate = income - allocated;
 
@@ -166,5 +214,10 @@ export function useBudget() {
     updateCategoryLimit,
     allocated,
     leftToAllocate,
+    isAddingCategory,
+    setIsAddingCategory,
+    addCategoryError,
+    addCategory,
+    deleteCategory,
   };
 }
