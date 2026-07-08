@@ -2,9 +2,9 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
   width: min(calc(100% - 24px), 560px);
-  padding: 6px 20px calc(6px + env(safe-area-inset-bottom));
+  padding: 6px 20px;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(16px);
   border-radius: 28px;
