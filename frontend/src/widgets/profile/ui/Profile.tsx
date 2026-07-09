@@ -22,6 +22,8 @@ export function Profile() {
     startEditingUsername,
     cancelEditingUsername,
     saveUsername,
+    isSavingPayday,
+    savePayday,
   } = useProfile();
   const { currency, setCurrency } = useCurrency();
   const { t, locale, setLocale } = useTranslation();
@@ -118,6 +120,25 @@ export function Profile() {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className={styles.settingsRow}>
+          <span>{t('profile.payday')}</span>
+          <select
+            className={styles.paydaySelect}
+            value={user.payday ?? ''}
+            onChange={(event) => event.target.value && savePayday(Number(event.target.value))}
+            disabled={isSavingPayday}
+          >
+            <option value="" disabled>
+              {t('profile.paydayNotSet')}
+            </option>
+            {Array.from({ length: 31 }, (_, index) => index + 1).map((day) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className={styles.settingsRow}>

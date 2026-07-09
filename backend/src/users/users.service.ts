@@ -16,6 +16,25 @@ export class UsersService {
       data: { username },
     });
 
-    return { id: user.id, email: user.email, username: user.username };
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      payday: user.payday,
+    };
+  }
+
+  async updatePayday(userId: string, payday: number) {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { payday },
+    });
+
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      payday: user.payday,
+    };
   }
 }

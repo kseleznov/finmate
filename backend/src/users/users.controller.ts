@@ -3,6 +3,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from './users.service';
 import { UpdateUsernameDto } from './dto/update-username.dto';
+import { UpdatePaydayDto } from './dto/update-payday.dto';
 
 @Controller('users')
 export class UsersController {
@@ -17,5 +18,13 @@ export class UsersController {
       user.userId,
       updateUsernameDto.username,
     );
+  }
+
+  @Patch('me/payday')
+  updatePayday(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() updatePaydayDto: UpdatePaydayDto,
+  ) {
+    return this.usersService.updatePayday(user.userId, updatePaydayDto.payday);
   }
 }

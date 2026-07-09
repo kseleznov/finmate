@@ -65,6 +65,8 @@ const ru = {
   profile: {
     currency: 'Валюта',
     language: 'Язык',
+    payday: 'Дата зарплаты',
+    paydayNotSet: 'Не задано',
     logout: 'Выйти',
     editUsername: 'Изменить имя пользователя',
     usernameTaken: 'Это имя пользователя уже занято',
@@ -185,6 +187,8 @@ const en: Dictionary = {
   profile: {
     currency: 'Currency',
     language: 'Language',
+    payday: 'Payday',
+    paydayNotSet: 'Not set',
     logout: 'Log out',
     editUsername: 'Edit username',
     usernameTaken: 'This username is already taken',

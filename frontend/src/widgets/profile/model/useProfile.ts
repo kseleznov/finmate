@@ -22,6 +22,7 @@ export function useProfile() {
   const [usernameDraft, setUsernameDraft] = useState('');
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [isSavingUsername, setIsSavingUsername] = useState(false);
+  const [isSavingPayday, setIsSavingPayday] = useState(false);
 
   const startEditingUsername = () => {
     setUsernameDraft(user?.username ?? '');
@@ -64,6 +65,22 @@ export function useProfile() {
     }
   };
 
+  const savePayday = async (value: number) => {
+    setIsSavingPayday(true);
+
+    try {
+      const updated = await apiFetch<StoredUser>('/users/me/payday', {
+        method: 'PATCH',
+        body: JSON.stringify({ payday: value }),
+      });
+      updateUser(updated);
+    } catch {
+      // low-stakes preference toggle — the select simply won't reflect the change
+    } finally {
+      setIsSavingPayday(false);
+    }
+  };
+
   return {
     user,
     isAuthenticated,
@@ -78,5 +95,7 @@ export function useProfile() {
     startEditingUsername,
     cancelEditingUsername,
     saveUsername,
+    isSavingPayday,
+    savePayday,
   };
 }

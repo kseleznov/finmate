@@ -50,7 +50,12 @@ export class AuthService {
       })),
     });
 
-    return this.buildAuthResponse(user.id, user.email, user.username);
+    return this.buildAuthResponse(
+      user.id,
+      user.email,
+      user.username,
+      user.payday,
+    );
   }
 
   async login(loginDto: LoginDto) {
@@ -69,15 +74,21 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return this.buildAuthResponse(user.id, user.email, user.username);
+    return this.buildAuthResponse(
+      user.id,
+      user.email,
+      user.username,
+      user.payday,
+    );
   }
 
   private buildAuthResponse(
     userId: string,
     email: string,
     username: string | null,
+    payday: number | null,
   ) {
     const accessToken = this.jwtService.sign({ sub: userId, email });
-    return { accessToken, user: { id: userId, email, username } };
+    return { accessToken, user: { id: userId, email, username, payday } };
   }
 }

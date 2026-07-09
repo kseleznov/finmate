@@ -5,6 +5,7 @@ import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
 import { useLocale } from '@/entities/locale';
+import { useAuth } from '@/entities/user';
 
 interface DashboardSummaryDto {
   income: number;
@@ -22,13 +23,36 @@ function getDaysRemainingInMonth() {
   return lastDay - now.getDate();
 }
 
+function getDaysUntilNextPayday(payday: number) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const today = new Date(year, month, now.getDate());
+
+  function clampedPaydayDate(y: number, m: number) {
+    const lastDay = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(payday, lastDay));
+  }
+
+  let target = clampedPaydayDate(year, month);
+  if (target < today) {
+    target = clampedPaydayDate(year, month + 1);
+  }
+
+  const msPerDay = 24 * 60 * 60 * 1000;
+  return Math.round((target.getTime() - today.getTime()) / msPerDay);
+}
+
 export function useHeader() {
   const { currency } = useCurrency();
   const { intlLocale } = useLocale();
+  const { user } = useAuth();
   const [spent, setSpent] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const daysRemaining = getDaysRemainingInMonth();
+  const daysRemaining = user?.payday
+    ? getDaysUntilNextPayday(user.payday)
+    : getDaysRemainingInMonth();
   const formatAmount = (amount: number) => formatCurrencyAmount(amount, currency, intlLocale);
 
   useEffect(() => {
