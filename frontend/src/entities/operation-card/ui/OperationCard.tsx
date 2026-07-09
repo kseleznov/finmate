@@ -1,3 +1,4 @@
+import { TrashIcon } from './TrashIcon';
 import styles from './OperationCard.module.css';
 
 interface Props {
@@ -6,9 +7,19 @@ interface Props {
   amount: string;
   icon?: string;
   color?: string;
+  deleteAriaLabel?: string;
+  onDelete?: () => void;
 }
 
-export function OperationCard({ title, subtitle, amount, icon = '💳', color = '#6366f1' }: Props) {
+export function OperationCard({
+  title,
+  subtitle,
+  amount,
+  icon = '💳',
+  color = '#6366f1',
+  deleteAriaLabel,
+  onDelete,
+}: Props) {
   return (
     <div className={styles.card}>
       <div className={styles.left}>
@@ -20,7 +31,19 @@ export function OperationCard({ title, subtitle, amount, icon = '💳', color = 
           {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
         </div>
       </div>
-      <div className={styles.amount}>{amount}</div>
+      <div className={styles.right}>
+        <div className={styles.amount}>{amount}</div>
+        {onDelete && (
+          <button
+            type="button"
+            className={styles.deleteButton}
+            onClick={onDelete}
+            aria-label={deleteAriaLabel}
+          >
+            <TrashIcon />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

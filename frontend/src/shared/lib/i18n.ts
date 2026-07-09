@@ -133,6 +133,10 @@ const ru = {
     emptySubtitle: 'Ваши расходы появятся здесь после первой добавленной операции',
     today: 'Сегодня',
     yesterday: 'Вчера',
+    deleteOperation: 'Удалить «{title}»',
+    deleteOperationTitle: 'Удалить операцию?',
+    confirmDeleteOperation: 'Удалить операцию «{title}»? Это действие нельзя отменить.',
+    errorDeleteOperation: 'Не удалось удалить операцию',
   },
   welcome: {
     tagline: 'Ваши финансы под контролем',
@@ -248,6 +252,10 @@ const en: Dictionary = {
     emptySubtitle: 'Your expenses will show up here once you add one',
     today: 'Today',
     yesterday: 'Yesterday',
+    deleteOperation: 'Delete {title}',
+    deleteOperationTitle: 'Delete operation?',
+    confirmDeleteOperation: 'Delete "{title}"? This action cannot be undone.',
+    errorDeleteOperation: 'Could not delete the operation',
   },
   welcome: {
     tagline: 'Your finances, under control',

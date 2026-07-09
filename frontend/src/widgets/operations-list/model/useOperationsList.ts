@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
@@ -50,6 +51,7 @@ function formatGroupDate(
 }
 
 export function useOperationsList() {
+  const router = useRouter();
   const { currency } = useCurrency();
   const { t, intlLocale } = useTranslation();
   const { isAuthenticated } = useAuth();
@@ -87,6 +89,21 @@ export function useOperationsList() {
     return formatCurrencyAmount(amount, currency, intlLocale);
   }
 
+  async function deleteOperation(id: string) {
+    if (!isAuthenticated) {
+      router.push('/profile');
+      return false;
+    }
+
+    try {
+      await apiFetch(`/operations/${id}`, { method: 'DELETE' });
+      setOperations((prev) => prev.filter((operation) => operation.id !== id));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   const groups: { date: string; operations: DisplayOperation[] }[] = [];
 
   for (const operation of operations) {
@@ -111,5 +128,5 @@ export function useOperationsList() {
     }
   }
 
-  return { formatAmount, groups, isLoading };
+  return { formatAmount, groups, isLoading, deleteOperation };
 }
