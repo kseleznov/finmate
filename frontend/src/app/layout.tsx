@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from 'next';
+import { cookies } from 'next/headers';
 import { HtmlLangSync } from '@/entities/locale';
+import { QueryProvider } from '@/entities/user';
+import { parseUserCookie } from '@/shared/api/session';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -24,16 +27,19 @@ export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const initialUser = parseUserCookie(cookieStore.get('finmate_user')?.value);
+
   return (
     <html lang="ru">
       <body>
         <HtmlLangSync />
-        {children}
+        <QueryProvider initialUser={initialUser}>{children}</QueryProvider>
       </body>
     </html>
   );

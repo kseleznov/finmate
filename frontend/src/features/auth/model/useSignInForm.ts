@@ -8,7 +8,6 @@ import { useTranslation } from '@/entities/locale';
 import type { StoredUser } from '@/shared/api/session';
 
 interface AuthResponse {
-  accessToken: string;
   user: StoredUser;
 }
 
@@ -30,7 +29,7 @@ export function useSignInForm() {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
-      login(data.accessToken, data.user);
+      login(data.user);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t('auth.signInError'));
     } finally {

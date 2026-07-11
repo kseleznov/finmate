@@ -5,6 +5,19 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getById(userId: string) {
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      payday: user.payday,
+    };
+  }
+
   async updateUsername(userId: string, username: string) {
     const existing = await this.prisma.user.findUnique({ where: { username } });
     if (existing && existing.id !== userId) {
