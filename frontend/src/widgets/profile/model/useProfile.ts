@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/entities/user';
 import { useTranslation } from '@/entities/locale';
 import { apiFetch, ApiError } from '@/shared/api/client';
-import type { StoredUser } from '@/shared/api/session';
+import type { StoredUser } from '@/shared/api/types';
 
 const MIN_USERNAME_LENGTH = 3;
 const USERNAME_PATTERN = /^[a-zA-Z0-9_.-]+$/;

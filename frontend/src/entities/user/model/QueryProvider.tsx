@@ -2,18 +2,15 @@
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { StoredUser } from '@/shared/api/session';
-import { ME_QUERY_KEY } from './useAuth';
+import { ME_QUERY_KEY, QUERY_STALE_TIME_MS } from './costants';
+import type { StoredUser } from '@/shared/api/types';
 
-const QUERY_STALE_TIME_MS = 5 * 60 * 1000;
-
-export function QueryProvider({
-  initialUser,
-  children,
-}: {
+interface Props {
   initialUser: StoredUser | null;
   children: React.ReactNode;
-}) {
+}
+
+export function QueryProvider({ initialUser, children }: Props) {
   const [client] = useState(() => {
     const queryClient = new QueryClient({
       defaultOptions: {
@@ -23,7 +20,9 @@ export function QueryProvider({
         },
       },
     });
+
     queryClient.setQueryData(ME_QUERY_KEY, initialUser);
+
     return queryClient;
   });
 

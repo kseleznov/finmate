@@ -1,8 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/shared/api/client';
-import type { StoredUser } from '@/shared/api/session';
-
-export const ME_QUERY_KEY = ['me'] as const;
+import { ME_QUERY_KEY } from './costants';
+import type { StoredUser } from '@/shared/api/types';
 
 export function useAuth() {
   const queryClient = useQueryClient();

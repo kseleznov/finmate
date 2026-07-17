@@ -5,7 +5,7 @@ import type { FormEvent } from 'react';
 import { apiFetch, ApiError } from '@/shared/api/client';
 import { useAuth } from '@/entities/user';
 import { useTranslation } from '@/entities/locale';
-import type { StoredUser } from '@/shared/api/session';
+import type { StoredUser } from '@/shared/api/types';
 
 interface AuthResponse {
   user: StoredUser;
