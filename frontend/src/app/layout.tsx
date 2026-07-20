@@ -33,7 +33,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const initialUser = parseUserCookie(cookieStore.get('finmate_user')?.value);
+  const cookieValue = cookieStore.get('finmate_user')?.value;
+  const initialUser = parseUserCookie(cookieValue);
 
   return (
     <html lang="ru">

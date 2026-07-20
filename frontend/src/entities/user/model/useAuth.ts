@@ -15,22 +15,19 @@ export function useAuth() {
 
   const user = data ?? null;
 
-  const login = (nextUser: StoredUser) => {
+  function login(nextUser: StoredUser) {
     queryClient.setQueryData(ME_QUERY_KEY, nextUser);
-  };
+  }
 
-  const logout = async () => {
-    try {
-      await apiFetch('/auth/logout', { method: 'POST' });
-    } catch {
-      // best-effort — очищаем кэш в любом случае
-    }
+  async function logout() {
+    await apiFetch('/auth/logout', { method: 'POST' });
+
     queryClient.setQueryData(ME_QUERY_KEY, null);
-  };
+  }
 
-  const updateUser = (nextUser: StoredUser) => {
+  function updateUser(nextUser: StoredUser) {
     queryClient.setQueryData(ME_QUERY_KEY, nextUser);
-  };
+  }
 
-  return { user, isAuthenticated: !!user, login, logout, updateUser };
+  return { user, isAuthenticated: Boolean(user), login, logout, updateUser };
 }
