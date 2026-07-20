@@ -6,7 +6,7 @@ import { useHeader } from '../model/useHeader';
 import styles from './Header.module.css';
 
 export function Header() {
-  const { spent, total, daysRemaining, formatAmount, percent, left } = useHeader();
+  const { spent, total, daysRemaining, percent, left, formatAmount } = useHeader();
   const { t } = useTranslation();
 
   return (
