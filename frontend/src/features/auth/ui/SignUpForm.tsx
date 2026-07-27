@@ -1,78 +1,77 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslation } from '@/entities/locale';
-import { useSignUpForm } from '../model/useSignUpForm';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/Input';
+import { register as registerUser } from '../api/auth';
+import { createSignUpSchema } from '../model/schema';
+import { useAuthForm } from '../model/useAuthForm';
 import styles from './AuthForm.module.css';
 
 export function SignUpForm() {
-  const {
-    email,
-    setEmail,
-    username,
-    setUsername,
-    password,
-    setPassword,
-    error,
-    isSubmitting,
-    handleSubmit,
-  } = useSignUpForm();
   const { t } = useTranslation();
+  const signUpSchema = useMemo(() => createSignUpSchema(t), [t]);
+
+  const { register, errors, isPending, onSubmit } = useAuthForm({
+    schema: signUpSchema,
+    defaultValues: { email: '', username: '', password: '' },
+    mutationFn: registerUser,
+    errorMessage: t('auth.signUpError'),
+  });
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={onSubmit} noValidate>
       <div className={styles.field}>
         <label className={styles.label} htmlFor="signup-email">
           {t('auth.email')}
         </label>
-        <input
+        <Input
           id="signup-email"
           type="email"
           className={styles.input}
           placeholder={t('auth.emailPlaceholder')}
           autoComplete="email"
-          required
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          {...register('email')}
         />
+        {errors.email && <span className={styles.error}>{errors.email.message}</span>}
       </div>
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="signup-username">
           {t('auth.username')}
         </label>
-        <input
+        <Input
           id="signup-username"
           type="text"
           className={styles.input}
           placeholder={t('auth.usernamePlaceholder')}
           autoComplete="username"
-          required
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          {...register('username')}
         />
+        {errors.username && <span className={styles.error}>{errors.username.message}</span>}
       </div>
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="signup-password">
           {t('auth.password')}
         </label>
-        <input
+        <Input
           id="signup-password"
           type="password"
           className={styles.input}
           placeholder={t('auth.passwordPlaceholderSignUp')}
           autoComplete="new-password"
-          required
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          {...register('password')}
         />
+        {errors.password && <span className={styles.error}>{errors.password.message}</span>}
       </div>
 
-      {error && <span className={styles.error}>{error}</span>}
+      {errors.root && <span className={styles.error}>{errors.root.message}</span>}
 
-      <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-        {isSubmitting ? t('auth.signUpLoading') : t('auth.signUp')}
-      </button>
+      <Button type="submit" className={styles.submitButton} disabled={isPending}>
+        {isPending ? t('auth.signUpLoading') : t('auth.signUp')}
+      </Button>
     </form>
   );
 }

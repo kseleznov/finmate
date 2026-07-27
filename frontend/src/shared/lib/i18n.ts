@@ -58,6 +58,8 @@ const ru = {
     signUpLoading: 'Создаём аккаунт…',
     signInError: 'Не удалось войти',
     signUpError: 'Не удалось зарегистрироваться',
+    emailInvalid: 'Введите корректный email',
+    passwordRequired: 'Введите пароль',
     passwordTooShort: 'Пароль должен быть не короче {min} символов',
     usernameTooShort: 'Имя пользователя должно быть не короче {min} символов',
     usernameInvalid: 'Только латинские буквы, цифры, точка, дефис и подчёркивание',
@@ -180,6 +182,8 @@ const en: Dictionary = {
     signUpLoading: 'Creating account…',
     signInError: 'Could not sign in',
     signUpError: 'Could not sign up',
+    emailInvalid: 'Enter a valid email',
+    passwordRequired: 'Enter your password',
     passwordTooShort: 'Password must be at least {min} characters',
     usernameTooShort: 'Username must be at least {min} characters',
     usernameInvalid: 'Only letters, numbers, dot, dash and underscore are allowed',
@@ -271,6 +275,8 @@ const en: Dictionary = {
 const dictionaries: Record<LocaleCode, Dictionary> = { ru, en };
 
 export type TranslationKey = string;
+
+export type TranslateFn = (key: TranslationKey, vars?: Record<string, string | number>) => string;
 
 export function translate(
   locale: LocaleCode,
