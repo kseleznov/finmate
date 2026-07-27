@@ -1,27 +1,23 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { useTranslation } from '@/entities/locale';
-import styles from './Donut.module.css';
 import { useDonut } from '../model/useDonut';
 import { renderCalloutLabel } from '../model/renderCalloutLabel';
+import { hexToRgba } from '../lib/hexToRgba';
+import styles from './Donut.module.css';
 
 export function Donut() {
-  const { t } = useTranslation();
   const {
-    data,
+    pieData,
+    isEmpty,
     RADIAN,
-    formatAmount,
-    hexToRgba,
     selected,
-    handleClick,
+    centerSub,
     centerLabel,
     centerAmount,
-    centerSub,
+    handleClick,
+    formatAmount,
   } = useDonut();
-
-  const isEmpty = data.length === 0;
-  const pieData = isEmpty ? [{ name: '', value: 1, color: '#12b76a', icon: '' }] : data;
 
   return (
     <div className={styles.container}>
@@ -44,7 +40,7 @@ export function Donut() {
                       : (props) =>
                           renderCalloutLabel({
                             props,
-                            data,
+                            data: pieData,
                             RADIAN,
                             hexToRgba,
                             selected,

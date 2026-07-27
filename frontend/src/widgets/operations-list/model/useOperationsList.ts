@@ -1,30 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { apiFetch } from '@/shared/api/client';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
 import { useTranslation } from '@/entities/locale';
 import { useAuth } from '@/entities/user';
+import { getOperations } from '../api/getOperations';
+import { deleteOperation as deleteOperationRequest } from '../api/deleteOperation';
+import type { DisplayOperation, OperationDto } from './types';
 
-interface OperationDto {
-  id: string;
-  title: string;
-  amount: number;
-  type: 'INCOME' | 'EXPENSE';
-  date: string;
-  category: { name: string; icon: string; color: string } | null;
-}
-
-interface DisplayOperation {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: string;
-  color: string;
-  amount: number;
-}
+const OPERATIONS_QUERY_KEY = ['operations'] as const;
 
 function isSameDay(a: Date, b: Date) {
   return (
@@ -52,38 +38,27 @@ function formatGroupDate(
 
 export function useOperationsList() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { currency } = useCurrency();
   const { t, intlLocale } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const [operations, setOperations] = useState<OperationDto[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    let cancelled = false;
+  const { data, isLoading } = useQuery({
+    queryKey: OPERATIONS_QUERY_KEY,
+    queryFn: getOperations,
+    enabled: isAuthenticated,
+  });
 
-    async function load() {
-      if (!isAuthenticated) {
-        await Promise.resolve();
-        if (cancelled) return;
+  const operations = data ?? [];
 
-        setOperations([]);
-        setIsLoading(false);
-        return;
-      }
-
-      const data = await apiFetch<OperationDto[]>('/operations');
-      if (cancelled) return;
-
-      setOperations(data);
-      setIsLoading(false);
-    }
-
-    void load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isAuthenticated]);
+  const deleteMutation = useMutation({
+    mutationFn: deleteOperationRequest,
+    onSuccess: (_data, id) => {
+      queryClient.setQueryData<OperationDto[]>(OPERATIONS_QUERY_KEY, (prev) =>
+        prev?.filter((operation) => operation.id !== id)
+      );
+    },
+  });
 
   function formatAmount(amount: number) {
     return formatCurrencyAmount(amount, currency, intlLocale);
@@ -96,8 +71,7 @@ export function useOperationsList() {
     }
 
     try {
-      await apiFetch(`/operations/${id}`, { method: 'DELETE' });
-      setOperations((prev) => prev.filter((operation) => operation.id !== id));
+      await deleteMutation.mutateAsync(id);
       return true;
     } catch {
       return false;

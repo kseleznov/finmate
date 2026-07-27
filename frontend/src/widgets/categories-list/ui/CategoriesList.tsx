@@ -1,8 +1,9 @@
 'use client';
 
 import { useCategoriesList } from '../model/useCategoriesList';
-import { CategoryCard } from '@/entities/сategory-сard';
+import { CategoryCard } from '@/entities/category';
 import { useTranslation } from '@/entities/locale';
+import { Button } from '@/shared/ui/button';
 import styles from './CategoriesList.module.css';
 
 export function CategoriesList() {
@@ -38,13 +39,9 @@ export function CategoriesList() {
       )}
 
       {categories.length > VISIBLE_COUNT && (
-        <button
-          type="button"
-          className={styles.toggleButton}
-          onClick={() => setExpanded((prev) => !prev)}
-        >
+        <Button className={styles.toggleButton} onClick={() => setExpanded((prev) => !prev)}>
           {expanded ? t('categories.collapse') : t('categories.showAll')}
-        </button>
+        </Button>
       )}
     </section>
   );
