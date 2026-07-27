@@ -1,4 +1,5 @@
-import { TrashIcon } from './TrashIcon';
+import { Button } from '@/shared/ui/button';
+import { TrashIcon } from './icons';
 import styles from './OperationCard.module.css';
 
 interface Props {
@@ -34,14 +35,9 @@ export function OperationCard({
       <div className={styles.right}>
         <div className={styles.amount}>{amount}</div>
         {onDelete && (
-          <button
-            type="button"
-            className={styles.deleteButton}
-            onClick={onDelete}
-            aria-label={deleteAriaLabel}
-          >
+          <Button className={styles.deleteButton} onClick={onDelete} aria-label={deleteAriaLabel}>
             <TrashIcon />
-          </button>
+          </Button>
         )}
       </div>
     </div>
