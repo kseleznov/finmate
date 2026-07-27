@@ -1,168 +1,67 @@
 'use client';
 
-import { SignInForm, SignUpForm } from '@/features/auth';
-import { CURRENCIES, useCurrency } from '@/entities/currency';
-import { LOCALES, useTranslation } from '@/entities/locale';
-import { useProfile } from '../model/useProfile';
-import { PencilIcon } from './PencilIcon';
+import { useState } from 'react';
+import { AuthCard } from '@/features/auth';
+import { PaydaySelect } from '@/features/update-payday';
+import { UsernameForm } from '@/features/update-username';
+import { useCurrency } from '@/entities/currency';
+import { useTranslation } from '@/entities/locale';
+import { Button } from '@/shared/ui/button';
+import { ChipGroup } from '@/shared/ui/ChipGroup';
+import { PencilIcon } from './icons';
+import { useAuth } from '@/entities/user';
 import styles from './Profile.module.css';
 
 export function Profile() {
-  const {
-    user,
-    isAuthenticated,
-    logout,
-    mode,
-    setMode,
-    isEditingUsername,
-    usernameDraft,
-    setUsernameDraft,
-    usernameError,
-    isSavingUsername,
-    startEditingUsername,
-    cancelEditingUsername,
-    saveUsername,
-    isSavingPayday,
-    savePayday,
-  } = useProfile();
-  const { currency, setCurrency } = useCurrency();
-  const { t, locale, setLocale } = useTranslation();
+  const [isEditing, setIsEditing] = useState(false);
+  const { currency, setCurrency, currencyItems } = useCurrency();
+  const { t, locale, setLocale, localeItems } = useTranslation();
+  const { user, logout } = useAuth();
 
-  if (!isAuthenticated || !user) {
-    return (
-      <div className={styles.authCard}>
-        <div className={styles.tabs}>
-          <button
-            type="button"
-            className={`${styles.tab} ${mode === 'signIn' ? styles.tabActive : ''}`}
-            onClick={() => setMode('signIn')}
-          >
-            {t('auth.signIn')}
-          </button>
-          <button
-            type="button"
-            className={`${styles.tab} ${mode === 'signUp' ? styles.tabActive : ''}`}
-            onClick={() => setMode('signUp')}
-          >
-            {t('auth.signUp')}
-          </button>
-        </div>
-
-        {mode === 'signIn' ? <SignInForm /> : <SignUpForm />}
-      </div>
-    );
+  if (!user) {
+    return <AuthCard />;
   }
-
-  const displayName = user.username ?? user.email;
 
   return (
     <div className={styles.profileCard}>
-      <div className={styles.avatar}>{displayName[0]?.toUpperCase()}</div>
+      <div className={styles.avatar}>{user.username[0]?.toUpperCase()}</div>
 
-      {isEditingUsername ? (
-        <div className={styles.usernameEdit}>
-          <input
-            type="text"
-            className={styles.usernameInput}
-            value={usernameDraft}
-            onChange={(event) => setUsernameDraft(event.target.value)}
-            onKeyDown={(event) => event.key === 'Enter' && saveUsername()}
-            autoFocus
-          />
-          {usernameError && <span className={styles.error}>{usernameError}</span>}
-          <div className={styles.usernameEditActions}>
-            <button
-              type="button"
-              className={styles.usernameCancelButton}
-              onClick={cancelEditingUsername}
-              disabled={isSavingUsername}
-            >
-              {t('common.cancel')}
-            </button>
-            <button
-              type="button"
-              className={styles.usernameSaveButton}
-              onClick={saveUsername}
-              disabled={isSavingUsername}
-            >
-              {t('common.save')}
-            </button>
-          </div>
-        </div>
+      {isEditing ? (
+        <UsernameForm onDone={() => setIsEditing(false)} />
       ) : (
         <div className={styles.usernameRow}>
-          <div className={styles.email}>{displayName}</div>
-          <button
-            type="button"
+          <div className={styles.email}>{user.username}</div>
+
+          <Button
             className={styles.editButton}
-            onClick={startEditingUsername}
+            onClick={() => setIsEditing(true)}
             aria-label={t('profile.editUsername')}
           >
             <PencilIcon />
-          </button>
+          </Button>
         </div>
       )}
 
       <div className={styles.settingsList}>
         <div className={styles.settingsRow}>
           <span>{t('profile.currency')}</span>
-          <div className={styles.currencyGroup}>
-            {CURRENCIES.map((item) => (
-              <button
-                key={item.code}
-                type="button"
-                className={`${styles.currencyButton} ${
-                  currency === item.code ? styles.currencyButtonActive : ''
-                }`}
-                onClick={() => setCurrency(item.code)}
-              >
-                {item.code}
-              </button>
-            ))}
-          </div>
+          <ChipGroup items={currencyItems} value={currency} onChange={setCurrency} />
         </div>
 
         <div className={styles.settingsRow}>
           <span>{t('profile.payday')}</span>
-          <select
-            className={styles.paydaySelect}
-            value={user.payday ?? ''}
-            onChange={(event) => event.target.value && savePayday(Number(event.target.value))}
-            disabled={isSavingPayday}
-          >
-            <option value="" disabled>
-              {t('profile.paydayNotSet')}
-            </option>
-            {Array.from({ length: 31 }, (_, index) => index + 1).map((day) => (
-              <option key={day} value={day}>
-                {day}
-              </option>
-            ))}
-          </select>
+          <PaydaySelect />
         </div>
 
         <div className={styles.settingsRow}>
           <span>{t('profile.language')}</span>
-          <div className={styles.currencyGroup}>
-            {LOCALES.map((item) => (
-              <button
-                key={item.code}
-                type="button"
-                className={`${styles.currencyButton} ${
-                  locale === item.code ? styles.currencyButtonActive : ''
-                }`}
-                onClick={() => setLocale(item.code)}
-              >
-                {item.code.toUpperCase()}
-              </button>
-            ))}
-          </div>
+          <ChipGroup items={localeItems} value={locale} onChange={setLocale} />
         </div>
       </div>
 
-      <button type="button" className={styles.logoutButton} onClick={logout}>
+      <Button className={styles.logoutButton} onClick={() => logout()}>
         {t('profile.logout')}
-      </button>
+      </Button>
     </div>
   );
 }
