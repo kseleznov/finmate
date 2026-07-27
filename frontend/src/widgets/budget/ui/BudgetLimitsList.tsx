@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BudgetLimitCard } from '@/entities/budget-limit-card';
+import { BudgetLimitCard } from '@/entities/budget-limit';
 import { useTranslation } from '@/entities/locale';
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog';
 import { AddCategoryForm } from './AddCategoryForm';

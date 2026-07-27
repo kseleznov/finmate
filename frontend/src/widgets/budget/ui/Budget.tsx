@@ -5,35 +5,53 @@ import { BudgetSummary } from './BudgetSummary';
 import { BudgetLimitsList } from './BudgetLimitsList';
 
 export function Budget() {
-  const vm = useBudget();
+  const {
+    isLoading,
+    income,
+    isEditingIncome,
+    allocated,
+    leftToAllocate,
+    categories,
+    editingCategoryId,
+    isAddingCategory,
+    addCategoryError,
+    formatAmount,
+    setIncome,
+    setEditingCategoryId,
+    updateCategoryLimit,
+    deleteCategory,
+    setIsAddingCategory,
+    setIsEditingIncome,
+    addCategory,
+  } = useBudget();
 
-  if (vm.isLoading) {
+  if (isLoading) {
     return null;
   }
 
   return (
     <>
       <BudgetSummary
-        formatAmount={vm.formatAmount}
-        income={vm.income}
-        setIncome={vm.setIncome}
-        isEditingIncome={vm.isEditingIncome}
-        setIsEditingIncome={vm.setIsEditingIncome}
-        allocated={vm.allocated}
-        leftToAllocate={vm.leftToAllocate}
+        formatAmount={formatAmount}
+        income={income}
+        setIncome={setIncome}
+        isEditingIncome={isEditingIncome}
+        setIsEditingIncome={setIsEditingIncome}
+        allocated={allocated}
+        leftToAllocate={leftToAllocate}
       />
 
       <BudgetLimitsList
-        formatAmount={vm.formatAmount}
-        categories={vm.categories}
-        editingCategoryId={vm.editingCategoryId}
-        setEditingCategoryId={vm.setEditingCategoryId}
-        updateCategoryLimit={vm.updateCategoryLimit}
-        onDeleteCategory={vm.deleteCategory}
-        isAddingCategory={vm.isAddingCategory}
-        setIsAddingCategory={vm.setIsAddingCategory}
-        addCategoryError={vm.addCategoryError}
-        onAddCategory={vm.addCategory}
+        formatAmount={formatAmount}
+        categories={categories}
+        editingCategoryId={editingCategoryId}
+        setEditingCategoryId={setEditingCategoryId}
+        updateCategoryLimit={updateCategoryLimit}
+        onDeleteCategory={deleteCategory}
+        isAddingCategory={isAddingCategory}
+        setIsAddingCategory={setIsAddingCategory}
+        addCategoryError={addCategoryError}
+        onAddCategory={addCategory}
       />
     </>
   );

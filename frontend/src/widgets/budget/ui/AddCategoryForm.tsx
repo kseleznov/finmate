@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useTranslation } from '@/entities/locale';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/Input';
 import styles from './AddCategoryForm.module.css';
 
 interface Props {
@@ -23,9 +25,9 @@ export function AddCategoryForm({ isAdding, setIsAdding, error, onSubmit }: Prop
 
   if (!isAdding) {
     return (
-      <button type="button" className={styles.addButton} onClick={() => setIsAdding(true)}>
+      <Button className={styles.addButton} onClick={() => setIsAdding(true)}>
         + {t('budget.addCategory')}
-      </button>
+      </Button>
     );
   }
 
@@ -57,7 +59,7 @@ export function AddCategoryForm({ isAdding, setIsAdding, error, onSubmit }: Prop
   return (
     <div className={styles.card}>
       <div className={styles.row}>
-        <input
+        <Input
           type="text"
           className={styles.iconInput}
           value={icon}
@@ -66,7 +68,7 @@ export function AddCategoryForm({ isAdding, setIsAdding, error, onSubmit }: Prop
           aria-label={t('budget.categoryIconPlaceholder')}
         />
         <div className={styles.colorSwatch} style={{ background: color }}>
-          <input
+          <Input
             type="color"
             className={styles.colorInput}
             value={color}
@@ -74,7 +76,7 @@ export function AddCategoryForm({ isAdding, setIsAdding, error, onSubmit }: Prop
             aria-label={t('budget.categoryColorPlaceholder')}
           />
         </div>
-        <input
+        <Input
           type="text"
           className={styles.nameInput}
           placeholder={t('budget.categoryNamePlaceholder')}
@@ -94,12 +96,12 @@ export function AddCategoryForm({ isAdding, setIsAdding, error, onSubmit }: Prop
       )}
 
       <div className={styles.actions}>
-        <button type="button" className={styles.cancelButton} onClick={handleCancel}>
+        <Button className={styles.cancelButton} onClick={handleCancel}>
           {t('common.cancel')}
-        </button>
-        <button type="button" className={styles.saveButton} onClick={handleSubmit}>
+        </Button>
+        <Button className={styles.saveButton} onClick={handleSubmit}>
           {t('common.save')}
-        </button>
+        </Button>
       </div>
     </div>
   );
