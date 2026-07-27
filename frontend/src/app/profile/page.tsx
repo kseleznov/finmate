@@ -1,10 +1,10 @@
 'use client';
 
 import { Suspense } from 'react';
-import styles from './page.module.css';
 import { Profile } from '@/widgets/profile';
 import { BottomNavigation } from '@/widgets/bottom-navigation';
 import { useTranslation } from '@/entities/locale';
+import styles from './page.module.css';
 
 export default function ProfilePage() {
   const { t } = useTranslation();

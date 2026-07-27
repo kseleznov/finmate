@@ -1,6 +1,6 @@
 export interface StoredUser {
   id: string;
   email: string;
-  username: string | null;
+  username: string;
   payday: number | null;
 }

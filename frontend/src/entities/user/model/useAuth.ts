@@ -1,5 +1,6 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiFetch } from '@/shared/api/client';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getMe } from '../api/getMe';
+import { logout as logoutRequest } from '../api/logout';
 import { ME_QUERY_KEY } from './costants';
 import type { StoredUser } from '@/shared/api/types';
 
@@ -8,26 +9,31 @@ export function useAuth() {
 
   const { data } = useQuery<StoredUser | null>({
     queryKey: ME_QUERY_KEY,
-    queryFn: () => apiFetch<StoredUser>('/users/me'),
+    queryFn: getMe,
     retry: false,
     enabled: queryClient.getQueryData<StoredUser | null>(ME_QUERY_KEY) !== null,
   });
 
   const user = data ?? null;
 
+  const logoutMutation = useMutation({
+    mutationFn: logoutRequest,
+    onSuccess: () => queryClient.setQueryData(ME_QUERY_KEY, null),
+  });
+
   function login(nextUser: StoredUser) {
     queryClient.setQueryData(ME_QUERY_KEY, nextUser);
-  }
-
-  async function logout() {
-    await apiFetch('/auth/logout', { method: 'POST' });
-
-    queryClient.setQueryData(ME_QUERY_KEY, null);
   }
 
   function updateUser(nextUser: StoredUser) {
     queryClient.setQueryData(ME_QUERY_KEY, nextUser);
   }
 
-  return { user, isAuthenticated: Boolean(user), login, logout, updateUser };
+  return {
+    user,
+    isAuthenticated: Boolean(user),
+    login,
+    logout: logoutMutation.mutate,
+    updateUser,
+  };
 }

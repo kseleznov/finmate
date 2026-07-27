@@ -2,15 +2,17 @@
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ME_QUERY_KEY, QUERY_STALE_TIME_MS } from './costants';
+import { seedAuthQuery } from '@/entities/user';
 import type { StoredUser } from '@/shared/api/types';
+
+const QUERY_STALE_TIME_MS = 5 * 60 * 1000;
 
 interface Props {
   initialUser: StoredUser | null;
   children: React.ReactNode;
 }
 
-export function QueryProvider({ initialUser, children }: Props) {
+export function Providers({ initialUser, children }: Props) {
   const [client] = useState(() => {
     const queryClient = new QueryClient({
       defaultOptions: {
@@ -21,7 +23,7 @@ export function QueryProvider({ initialUser, children }: Props) {
       },
     });
 
-    queryClient.setQueryData(ME_QUERY_KEY, initialUser);
+    seedAuthQuery(queryClient, initialUser);
 
     return queryClient;
   });

@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { HtmlLangSync } from '@/entities/locale';
-import { QueryProvider } from '@/entities/user';
 import { parseUserCookie } from '@/shared/api/session';
+import { Providers } from './providers';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
@@ -40,7 +40,7 @@ export default async function RootLayout({
     <html lang="ru">
       <body>
         <HtmlLangSync />
-        <QueryProvider initialUser={initialUser}>{children}</QueryProvider>
+        <Providers initialUser={initialUser}>{children}</Providers>
       </body>
     </html>
   );
