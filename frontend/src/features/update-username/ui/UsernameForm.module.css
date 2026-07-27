@@ -1,0 +1,60 @@
+.usernameEdit {
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.usernameInput {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.04);
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+  outline: none;
+}
+
+.usernameEditActions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.usernameCancelButton,
+.usernameSaveButton {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.usernameCancelButton {
+  background: rgba(15, 23, 42, 0.04);
+  color: #64748b;
+}
+
+.usernameSaveButton {
+  background: #8b7cf0;
+  color: #fff;
+}
+
+.usernameSaveButton:disabled,
+.usernameCancelButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.error {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ef4444;
+}
