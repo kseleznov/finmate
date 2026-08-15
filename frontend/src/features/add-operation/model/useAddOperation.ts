@@ -8,7 +8,7 @@ import { ApiError } from '@/shared/api/client';
 import { useTranslation } from '@/entities/locale';
 import { getBudgetLimits } from '../api/getBudgetLimits';
 import { addOperation } from '../api/addOperation';
-import { getCurrentMonth } from '../lib/getCurrentMonth';
+import { getCurrentMonth } from '@/shared/lib/date';
 import type { DisplayCategory, Step } from './types';
 
 export function useAddOperation() {

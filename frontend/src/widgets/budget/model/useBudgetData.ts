@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { DEFAULT_EXPENSE_CATEGORIES } from '@/shared/lib/defaultCategories';
-import { getBudgetCategories } from '../api/getBudgetCategories';
-import { getBudgetLimits } from '../api/getBudgetLimits';
-import { getBudgetIncome } from '../api/getBudgetIncome';
+import { getBudgetCategories, getBudgetLimits, getBudgetIncome } from '../api/budget';
 import type { BudgetCategory } from './types';
 
 export interface BudgetData {

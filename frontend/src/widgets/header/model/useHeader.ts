@@ -7,7 +7,7 @@ import { useLocale } from '@/entities/locale';
 import { useAuth } from '@/entities/user';
 import { getDashboardSummary } from '../api/getDashboardSummary';
 import { getDaysUntilNextPayday } from '../lib/getDaysUntilNextPayday';
-import { getCurrentMonth } from '../lib/getCurrentMonth';
+import { getCurrentMonth } from '@/shared/lib/date';
 import { getDaysRemainingInMonth } from '../lib/getDaysRemainingInMonth';
 import type { DashboardSummaryDto } from './types';
 

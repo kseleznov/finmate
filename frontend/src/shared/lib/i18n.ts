@@ -111,6 +111,7 @@ const ru = {
     categoryColorPlaceholder: 'Выбрать цвет',
     errorAddCategory: 'Не удалось добавить категорию',
     errorCategoryName: 'Введите название категории',
+    errorUpdateIncome: 'Не удалось сохранить доход',
   },
   categories: {
     title: 'Категории',
@@ -235,6 +236,7 @@ const en: Dictionary = {
     categoryColorPlaceholder: 'Select color',
     errorAddCategory: 'Could not add the category',
     errorCategoryName: 'Enter a category name',
+    errorUpdateIncome: 'Could not save the income',
   },
   categories: {
     title: 'Categories',

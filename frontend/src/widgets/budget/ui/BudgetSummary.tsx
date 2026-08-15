@@ -10,6 +10,7 @@ interface Props {
   setIncome: (income: number) => void;
   isEditingIncome: boolean;
   setIsEditingIncome: (value: boolean) => void;
+  incomeError: string | null;
   allocated: number;
   leftToAllocate: number;
 }
@@ -17,6 +18,7 @@ interface Props {
 export function BudgetSummary({
   income,
   isEditingIncome,
+  incomeError,
   allocated,
   leftToAllocate,
   setIncome,
@@ -54,6 +56,8 @@ export function BudgetSummary({
           <PencilIcon />
         </Button>
       </div>
+
+      {incomeError && <div className={styles.error}>{t(`budget.${incomeError}`)}</div>}
 
       {income > 0 && (
         <>

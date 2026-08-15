@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
@@ -9,8 +9,8 @@ import { useRequireAuth } from '@/entities/user';
 import { useAddBudgetCategory } from '@/features/add-budget-category';
 import { useDeleteBudgetCategory } from '@/features/delete-budget-category';
 import { useUpdateBudgetLimit } from '@/features/update-budget-limit';
-import { updateBudgetIncome } from '../api/updateBudgetIncome';
-import { getCurrentMonth } from '../lib/getCurrentMonth';
+import { updateBudgetIncome } from '../api/budget';
+import { getCurrentMonth } from '@/shared/lib/date';
 import { useBudgetData, budgetQueryKey } from './useBudgetData';
 import type { BudgetData } from './useBudgetData';
 import type { BudgetCategory } from './types';
@@ -24,6 +24,8 @@ export function useBudget() {
   const queryKey = budgetQueryKey(month, isAuthenticated);
   const { data, isPending } = useBudgetData(month, isAuthenticated);
   const [isEditingIncome, setIsEditingIncomeState] = useState(false);
+  const [incomeError, setIncomeError] = useState<string | null>(null);
+  const incomeBeforeEditRef = useRef(0);
   const categories = data?.categories ?? [];
   const income = data?.income ?? 0;
 
@@ -48,10 +50,22 @@ export function useBudget() {
       return;
     }
 
+    if (value) {
+      setIncomeError(null);
+      incomeBeforeEditRef.current = income;
+    }
+
     setIsEditingIncomeState(value);
 
     if (!value && isAuthenticated) {
-      updateBudgetIncome(month, income).catch(() => {});
+      const savedIncome = incomeBeforeEditRef.current;
+
+      updateBudgetIncome(month, income)
+        .then(() => queryClient.invalidateQueries({ queryKey }))
+        .catch(() => {
+          setIncome(savedIncome);
+          setIncomeError('errorUpdateIncome');
+        });
     }
   }
 
@@ -79,6 +93,7 @@ export function useBudget() {
       ...prev,
       { id: created.id, title: created.name, icon: created.icon, color: created.color, limit: 0 },
     ]);
+    queryClient.invalidateQueries({ queryKey });
 
     return true;
   }
@@ -90,6 +105,7 @@ export function useBudget() {
 
     if (ok) {
       setCategories((prev) => prev.filter((category) => category.id !== id));
+      queryClient.invalidateQueries({ queryKey });
     }
 
     return ok;
@@ -99,12 +115,13 @@ export function useBudget() {
   const leftToAllocate = income - allocated;
 
   return {
-    isLoading: isPending,
+    isPending,
     formatAmount,
     income,
     setIncome,
     isEditingIncome,
     setIsEditingIncome,
+    incomeError,
     categories,
     editingCategoryId,
     setEditingCategoryId,

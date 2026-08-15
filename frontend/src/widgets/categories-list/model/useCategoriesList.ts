@@ -6,7 +6,7 @@ import { formatAmount as formatCurrencyAmount } from '@/shared/lib/currency';
 import { useCurrency } from '@/entities/currency';
 import { useLocale } from '@/entities/locale';
 import { getDashboardSummary } from '../api/getDashboardSummary';
-import { getCurrentMonth } from '../lib/getCurrentMonth';
+import { getCurrentMonth } from '@/shared/lib/date';
 import type { DisplayCategory } from './types';
 
 const VISIBLE_COUNT = 3;

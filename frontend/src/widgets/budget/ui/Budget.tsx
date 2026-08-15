@@ -6,9 +6,10 @@ import { BudgetLimitsList } from './BudgetLimitsList';
 
 export function Budget() {
   const {
-    isLoading,
+    isPending,
     income,
     isEditingIncome,
+    incomeError,
     allocated,
     leftToAllocate,
     categories,
@@ -25,7 +26,7 @@ export function Budget() {
     addCategory,
   } = useBudget();
 
-  if (isLoading) {
+  if (isPending) {
     return null;
   }
 
@@ -37,6 +38,7 @@ export function Budget() {
         setIncome={setIncome}
         isEditingIncome={isEditingIncome}
         setIsEditingIncome={setIsEditingIncome}
+        incomeError={incomeError}
         allocated={allocated}
         leftToAllocate={leftToAllocate}
       />
