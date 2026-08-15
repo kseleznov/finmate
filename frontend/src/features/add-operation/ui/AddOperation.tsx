@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useTranslation } from '@/entities/locale';
+import { Button } from '@/shared/ui/button';
 import { useAddOperation } from '../model/useAddOperation';
 import { MethodStep } from './MethodStep';
 import { FormStep } from './FormStep';
-import { ChevronLeftIcon } from './ChevronLeftIcon';
-import { CloseIcon } from './CloseIcon';
+import { ChevronLeftIcon, CloseIcon } from './icons';
 import styles from './AddOperation.module.css';
 
 export function AddOperation() {
@@ -17,18 +16,21 @@ export function AddOperation() {
     <>
       <div className={styles.header}>
         {vm.step === 'manual' ? (
-          <button
-            type="button"
+          <Button
             className={styles.backLink}
             onClick={vm.goToChoose}
             aria-label={t('addOperation.back')}
           >
             <ChevronLeftIcon />
-          </button>
+          </Button>
         ) : (
-          <Link href="/overview" className={styles.closeLink} aria-label={t('addOperation.close')}>
+          <Button
+            href="/overview"
+            className={styles.closeLink}
+            aria-label={t('addOperation.close')}
+          >
             <CloseIcon />
-          </Link>
+          </Button>
         )}
         <h1 className={styles.title}>{t('addOperation.title')}</h1>
       </div>

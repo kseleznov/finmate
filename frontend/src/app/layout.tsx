@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { HtmlLangSync } from '@/entities/locale';
-import { QueryProvider } from '@/entities/user';
 import { parseUserCookie } from '@/shared/api/session';
+import { Providers } from './providers';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
@@ -33,13 +33,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const initialUser = parseUserCookie(cookieStore.get('finmate_user')?.value);
+  const cookieValue = cookieStore.get('finmate_user')?.value;
+  const initialUser = parseUserCookie(cookieValue);
 
   return (
     <html lang="ru">
       <body>
         <HtmlLangSync />
-        <QueryProvider initialUser={initialUser}>{children}</QueryProvider>
+        <Providers initialUser={initialUser}>{children}</Providers>
       </body>
     </html>
   );

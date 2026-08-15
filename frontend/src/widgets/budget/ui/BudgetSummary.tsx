@@ -1,5 +1,7 @@
 import { useTranslation } from '@/entities/locale';
-import { PencilIcon } from './PencilIcon';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/Input';
+import { PencilIcon } from './icons';
 import styles from './BudgetSummary.module.css';
 
 interface Props {
@@ -8,18 +10,20 @@ interface Props {
   setIncome: (income: number) => void;
   isEditingIncome: boolean;
   setIsEditingIncome: (value: boolean) => void;
+  incomeError: string | null;
   allocated: number;
   leftToAllocate: number;
 }
 
 export function BudgetSummary({
-  formatAmount,
   income,
-  setIncome,
   isEditingIncome,
-  setIsEditingIncome,
+  incomeError,
   allocated,
   leftToAllocate,
+  setIncome,
+  setIsEditingIncome,
+  formatAmount,
 }: Props) {
   const { t } = useTranslation();
 
@@ -29,7 +33,7 @@ export function BudgetSummary({
         <div>
           <div className={styles.label}>{t('budget.expectedIncome')}</div>
           {isEditingIncome ? (
-            <input
+            <Input
               type="number"
               className={styles.incomeInput}
               placeholder="0"
@@ -44,15 +48,16 @@ export function BudgetSummary({
           )}
         </div>
 
-        <button
-          type="button"
+        <Button
           className={styles.editButton}
           onClick={() => setIsEditingIncome(true)}
           aria-label={t('budget.editIncome')}
         >
           <PencilIcon />
-        </button>
+        </Button>
       </div>
+
+      {incomeError && <div className={styles.error}>{t(`budget.${incomeError}`)}</div>}
 
       {income > 0 && (
         <>
@@ -63,6 +68,7 @@ export function BudgetSummary({
               <div className={styles.statLabel}>{t('budget.allocated')}</div>
               <div className={styles.statValue}>{formatAmount(allocated)}</div>
             </div>
+
             <div className={styles.statRight}>
               <div className={styles.statLabel}>{t('budget.leftToAllocate')}</div>
               <div className={styles.statValue}>{formatAmount(leftToAllocate)}</div>

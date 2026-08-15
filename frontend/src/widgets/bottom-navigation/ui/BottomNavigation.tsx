@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
+import { Button } from '@/shared/ui/button/Button';
 import { useBottomNavigation } from '../model/useBottomNavigation';
+import clsx from 'clsx';
 import styles from './BottomNavigation.module.css';
 
 export function BottomNavigation() {
@@ -11,29 +12,29 @@ export function BottomNavigation() {
   return (
     <nav className={styles.bottomNav}>
       {[firstItem, secondItem].map(({ id, label, href, Icon }) => (
-        <Link
+        <Button
           key={id}
           href={href}
-          className={`${styles.navItem} ${active === id ? styles.navItemActive : ''}`}
+          className={clsx(styles.navItem, active === id && styles.navItemActive)}
         >
           <Icon />
           <span>{label}</span>
-        </Link>
+        </Button>
       ))}
 
-      <Link href={addHref} className={styles.plusButton} aria-label={addAria}>
+      <Button href={addHref} className={styles.plusButton} aria-label={addAria}>
         +
-      </Link>
+      </Button>
 
       {[thirdItem, fourthItem].map(({ id, label, href, Icon }) => (
-        <Link
+        <Button
           key={id}
           href={href}
-          className={`${styles.navItem} ${active === id ? styles.navItemActive : ''}`}
+          className={clsx(styles.navItem, active === id && styles.navItemActive)}
         >
           <Icon />
           <span>{label}</span>
-        </Link>
+        </Button>
       ))}
     </nav>
   );

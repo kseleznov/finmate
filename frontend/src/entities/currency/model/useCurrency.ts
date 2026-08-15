@@ -1,33 +1,17 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-import { getStoredCurrency, setStoredCurrency } from '@/shared/lib/currency';
-import type { CurrencyCode } from '@/shared/lib/currency';
-
-type Listener = () => void;
-
-const listeners = new Set<Listener>();
-
-function subscribe(listener: Listener) {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
-
-function notify() {
-  listeners.forEach((listener) => listener());
-}
-
-function getServerSnapshot(): CurrencyCode {
-  return 'EUR';
-}
+import { useEffect } from 'react';
+import { CURRENCIES } from '@/shared/lib/currency';
+import { useCurrencyStore } from './currencyStore';
 
 export function useCurrency() {
-  const currency = useSyncExternalStore(subscribe, getStoredCurrency, getServerSnapshot);
+  useEffect(() => {
+    useCurrencyStore.persist.rehydrate();
+  }, []);
 
-  const setCurrency = (next: CurrencyCode) => {
-    setStoredCurrency(next);
-    notify();
-  };
+  const currency = useCurrencyStore((state) => state.currency);
+  const setCurrency = useCurrencyStore((state) => state.setCurrency);
+  const currencyItems = CURRENCIES.map((item) => ({ value: item.code, label: item.code }));
 
-  return { currency, setCurrency };
+  return { currency, setCurrency, currencyItems };
 }

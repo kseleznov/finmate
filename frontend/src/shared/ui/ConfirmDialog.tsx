@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { Button } from './button';
 import styles from './ConfirmDialog.module.css';
 
 interface Props {
@@ -58,17 +59,16 @@ export function ConfirmDialog({
         {error && <p className={styles.error}>{error}</p>}
 
         <div className={styles.actions}>
-          <button type="button" className={styles.cancelButton} onClick={onCancel}>
+          <Button className={styles.cancelButton} onClick={onCancel}>
             {cancelLabel}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             className={danger ? styles.dangerButton : styles.confirmButton}
             onClick={onConfirm}
             disabled={isConfirming}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

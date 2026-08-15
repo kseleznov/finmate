@@ -1,6 +1,9 @@
+import clsx from 'clsx';
 import { useCurrency } from '@/entities/currency';
 import { getCurrencySymbol } from '@/shared/lib/currency';
 import { useTranslation } from '@/entities/locale';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/Input';
 import type { useAddOperation } from '../model/useAddOperation';
 import styles from './FormStep.module.css';
 
@@ -30,7 +33,7 @@ export function FormStep({
           {t('addOperation.amountLabel', { symbol: getCurrencySymbol(currency) })}
         </label>
         <div className={styles.amountRow}>
-          <input
+          <Input
             id="amount"
             type="number"
             className={styles.amountInput}
@@ -39,22 +42,20 @@ export function FormStep({
             onChange={(event) => setAmount(Number(event.target.value) || 0)}
           />
           <div className={styles.stepper}>
-            <button
-              type="button"
+            <Button
               className={styles.stepperButton}
               onClick={incrementAmount}
               aria-label={t('addOperation.increaseAmount')}
             >
               ▲
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
               className={styles.stepperButton}
               onClick={decrementAmount}
               aria-label={t('addOperation.decreaseAmount')}
             >
               ▼
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -63,7 +64,7 @@ export function FormStep({
         <label className={styles.label} htmlFor="title">
           {t('addOperation.whatDidYouBuy')}
         </label>
-        <input
+        <Input
           id="title"
           type="text"
           className={styles.textInput}
@@ -77,26 +78,26 @@ export function FormStep({
         <span className={styles.label}>{t('addOperation.category')}</span>
         <div className={styles.categoryGrid}>
           {categories.map((category) => (
-            <button
+            <Button
               key={category.id}
-              type="button"
-              className={`${styles.categoryButton} ${
-                categoryId === category.id ? styles.categoryButtonActive : ''
-              }`}
+              className={clsx(
+                styles.categoryButton,
+                categoryId === category.id && styles.categoryButtonActive
+              )}
               onClick={() => setCategoryId(category.id)}
             >
               <span className={styles.categoryIcon}>{category.icon}</span>
               <span className={styles.categoryLabel}>{category.label}</span>
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       {error && <span className={styles.error}>{error}</span>}
 
-      <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+      <Button type="submit" className={styles.submitButton} disabled={isSubmitting}>
         {isSubmitting ? t('addOperation.saving') : t('addOperation.submit')}
-      </button>
+      </Button>
     </form>
   );
 }

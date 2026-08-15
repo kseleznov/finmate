@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useOperationsList } from '../model/useOperationsList';
-import { OperationCard } from '@/entities/operation-card';
+import { OperationCard } from '@/entities/operation';
 import { useTranslation } from '@/entities/locale';
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog';
 import styles from './OperationsList.module.css';

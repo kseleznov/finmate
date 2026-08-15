@@ -1,33 +1,17 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-import { getStoredLocale, setStoredLocale, getIntlLocale, DEFAULT_LOCALE } from '@/shared/lib/i18n';
-import type { LocaleCode } from '@/shared/lib/i18n';
-
-type Listener = () => void;
-
-const listeners = new Set<Listener>();
-
-function subscribe(listener: Listener) {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
-
-function notify() {
-  listeners.forEach((listener) => listener());
-}
-
-function getServerSnapshot(): LocaleCode {
-  return DEFAULT_LOCALE;
-}
+import { useEffect } from 'react';
+import { getIntlLocale, LOCALES } from '@/shared/lib/i18n';
+import { useLocaleStore, hydrateLocaleStore } from './localeStore';
 
 export function useLocale() {
-  const locale = useSyncExternalStore(subscribe, getStoredLocale, getServerSnapshot);
+  useEffect(() => {
+    hydrateLocaleStore();
+  }, []);
 
-  const setLocale = (next: LocaleCode) => {
-    setStoredLocale(next);
-    notify();
-  };
+  const locale = useLocaleStore((state) => state.locale);
+  const setLocale = useLocaleStore((state) => state.setLocale);
+  const localeItems = LOCALES.map((item) => ({ value: item.code, label: item.code.toUpperCase() }));
 
-  return { locale, setLocale, intlLocale: getIntlLocale(locale) };
+  return { locale, setLocale, intlLocale: getIntlLocale(locale), localeItems };
 }

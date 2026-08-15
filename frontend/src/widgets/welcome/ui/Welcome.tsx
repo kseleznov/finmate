@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { Logo } from '@/shared/ui/Logo';
+import { Button } from '@/shared/ui/button';
 import { useWelcome } from '../model/useWelcome';
 import styles from './Welcome.module.css';
 
@@ -15,12 +15,12 @@ export function Welcome() {
       <p className={styles.description}>{t('welcome.description')}</p>
 
       <div className={styles.actions}>
-        <Link href="/profile?mode=signUp" className={styles.signUpButton}>
+        <Button href="/profile?mode=signUp" className={styles.signUpButton}>
           {t('auth.signUp')}
-        </Link>
-        <Link href="/profile?mode=signIn" className={styles.signInButton}>
+        </Button>
+        <Button href="/profile?mode=signIn" className={styles.signInButton}>
           {t('auth.signIn')}
-        </Link>
+        </Button>
       </div>
     </div>
   );

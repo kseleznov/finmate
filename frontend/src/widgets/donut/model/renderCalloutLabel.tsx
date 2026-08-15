@@ -1,10 +1,13 @@
+import type { PieLabelRenderProps } from 'recharts';
+import type { DonutDatum } from './types';
+
 interface Props {
-  props: any;
-  data: any[];
+  props: PieLabelRenderProps;
+  data: DonutDatum[];
   RADIAN: number;
   hexToRgba: (color: string, alpha: number) => string;
   selected: number | null;
-  handleClick: (dataItem: any, index: number) => void;
+  handleClick: (dataItem: unknown, index: number) => void;
   styles: { [key: string]: string };
 }
 
@@ -17,7 +20,7 @@ export function renderCalloutLabel({
   handleClick,
   styles,
 }: Props) {
-  const { cx, cy, midAngle, outerRadius, index } = props;
+  const { cx, cy, midAngle = 0, outerRadius, index } = props;
   const entry = data[index];
   const radius = outerRadius + 38;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
